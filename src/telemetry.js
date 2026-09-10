@@ -1,0 +1,19 @@
+/* Seeded local telemetry. No measurements in this demo come from real hardware. */
+(function(scope){
+'use strict';
+class Telemetry {
+ constructor(devices,seed=42){this.devices=devices;this.seed=seed;this.seconds=0;this.energy=286.4;this.paused=false;this.alarm=null;this.events=[];this.totalTicks=0;for(let d of devices){d.baseTemp=d.temperature;d.basePower=d.power;d.baseCycle=d.cycle;d.acc=0;d.history=Array.from({length:40},(_,i)=>d.temperature+Math.sin(i*.45)*1.7);if(d.id===6)d.output=12480}}
+ random(){this.seed=(1664525*this.seed+1013904223)>>>0;return this.seed/4294967296}
+ step(dt){if(this.paused)return false;dt=Math.max(0,Math.min(dt,1));this.seconds+=dt;for(let d of this.devices){if(d.online&&d.state==='running'){d.acc+=dt;while(d.acc>=d.cycle){d.output++;d.acc-=d.cycle}}}this.energy+=this.devices.reduce((n,d)=>n+(d.online?d.power:0),0)*dt/3600;let tick=Math.floor(this.seconds);if(tick===this.totalTicks)return false;this.totalTicks=tick;
+  for(let d of this.devices){let active=d.state==='running',alarm=d.state==='alarm';d.temperature=alarm?Math.max(82,86+Math.sin(this.seconds*.15)*2.2):d.baseTemp+(active?Math.sin(this.seconds*.13+d.id)*1.7:-5)+(this.random()-.5)*.45;d.power=d.online?(active?d.basePower*(.97+this.random()*.06):alarm?.18:d.basePower*.09):0;d.cycle=d.baseCycle+(active?(this.random()-.5)*.08:0);d.history.push(Number(d.temperature.toFixed(2)));if(d.history.length>40)d.history.shift()}
+  return true
+ }
+ trigger(id=3){let d=this.devices.find(d=>d.id===id);if(!d)throw new Error('Unknown device');if(!d.online)throw new Error('Device is offline');if(this.alarm)return this.alarm;this.alarm={id:d.id,code:'TEMP-HIGH',title:'驱动器温度过高',threshold:80,at:this.seconds,previousState:d.state,acknowledged:false};d.state='alarm';d.temperature=86.4;d.power=.18;d.history.push(d.temperature);d.history.shift();this.events.unshift({type:'alarm',device:d.code,at:this.seconds,message:'驱动器温度超过 80 °C'});this.events=this.events.slice(0,20);return this.alarm}
+ recover(){if(!this.alarm)return false;let a=this.alarm,d=this.devices.find(d=>d.id===a.id);d.state=a.previousState==='alarm'?'running':a.previousState;d.temperature=d.baseTemp;d.power=d.state==='running'?d.basePower:d.basePower*.09;this.events.unshift({type:'recovered',device:d.code,at:this.seconds,message:'故障复位，温度回归模拟基线'});this.events=this.events.slice(0,20);this.alarm=null;return true}
+ toggleDevice(id){let d=this.devices.find(d=>d.id===id);if(!d||d.state==='alarm'||!d.online)return false;d.state=d.state==='running'?'idle':'running';d.power=d.state==='running'?d.basePower:d.basePower*.09;return true}
+ toggleOnline(id){let d=this.devices.find(d=>d.id===id);if(!d||d.state==='alarm')return false;if(d.online){d.savedState=d.state;d.online=false;d.state='idle';d.power=0;}else{d.online=true;d.state=d.savedState||'running';d.power=d.state==='running'?d.basePower:d.basePower*.09;}return true}
+ summary(){let running=this.devices.filter(d=>d.state==='running').length,idle=this.devices.filter(d=>d.state==='idle').length,alarms=this.devices.filter(d=>d.state==='alarm').length,online=this.devices.filter(d=>d.online).length,power=this.devices.reduce((n,d)=>n+d.power,0),output=this.devices.find(d=>d.id===6)?.output||0;let efficiency=Math.max(0,93.6-alarms*13.2-Math.max(0,idle-1)*6.2+Math.sin(this.seconds*.035)*.4);return {running,idle,alarms,online,power,output,efficiency,energy:this.energy}}
+ snapshot(){return {seconds:this.seconds,paused:this.paused,alarm:this.alarm?{...this.alarm}:null,summary:this.summary(),devices:this.devices.map(d=>({id:d.id,code:d.code,state:d.state,online:d.online,temperature:d.temperature,power:d.power,output:d.output,cycle:d.cycle})),events:[...this.events]}}
+}
+if(typeof module!=='undefined'&&module.exports)module.exports={Telemetry};else scope.Telemetry=Telemetry;
+})(typeof window!=='undefined'?window:globalThis);

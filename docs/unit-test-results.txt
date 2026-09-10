@@ -1,0 +1,226 @@
+
+> factory-twin@2.0.0 test
+> node --test tests/*.test.cjs
+
+TAP version 13
+# {"sampledRobotCycleSeconds":16,"samplesPerRobot":161,"minimumToolTipMetres":1.9724998188018799,"highestCassetteMetres":1.8475,"maxDownwardAxisDeviation":5.296550035664676e-8}
+# {"agvSampleSeconds":80,"samples":800,"maxStepMetres":0.07200000000000273}
+# Subtest: cast housings have finite positions, unit normals and matching UV streams
+ok 1 - cast housings have finite positions, unit normals and matching UV streams
+  ---
+  duration_ms: 3.744714
+  type: 'test'
+  ...
+# Subtest: cast face winding agrees with outward shading normals
+ok 2 - cast face winding agrees with outward shading normals
+  ---
+  duration_ms: 1.651026
+  type: 'test'
+  ...
+# Subtest: clockwise and counterclockwise input both generate closed thickness bounds
+ok 3 - clockwise and counterclockwise input both generate closed thickness bounds
+  ---
+  duration_ms: 2.494789
+  type: 'test'
+  ...
+# Subtest: inverse-transpose normals remain perpendicular under nonuniform scale
+ok 4 - inverse-transpose normals remain perpendicular under nonuniform scale
+  ---
+  duration_ms: 0.384642
+  type: 'test'
+  ...
+# Subtest: singular normal transforms fail finite instead of producing NaN
+ok 5 - singular normal transforms fail finite instead of producing NaN
+  ---
+  duration_ms: 0.220598
+  type: 'test'
+  ...
+# Subtest: model builder preserves eight unique equipment IDs after batching
+ok 6 - model builder preserves eight unique equipment IDs after batching
+  ---
+  duration_ms: 0.468736
+  type: 'test'
+  ...
+# Subtest: all static/dynamic merged geometry and world matrices remain finite
+ok 7 - all static/dynamic merged geometry and world matrices remain finite
+  ---
+  duration_ms: 34.365207
+  type: 'test'
+  ...
+# Subtest: both robot tools remain vertical and clear all cassette tops over a full motion cycle
+ok 8 - both robot tools remain vertical and clear all cassette tops over a full motion cycle
+  ---
+  duration_ms: 284.895144
+  type: 'test'
+  ...
+# Subtest: AGV loop is position-continuous through both semicircle joins and wraparound
+ok 9 - AGV loop is position-continuous through both semicircle joins and wraparound
+  ---
+  duration_ms: 12.989719
+  type: 'test'
+  ...
+# Subtest: standby AGV stays docked and wheel hubs stay still
+ok 10 - standby AGV stays docked and wheel hubs stay still
+  ---
+  duration_ms: 2.856692
+  type: 'test'
+  ...
+# Subtest: AGV leaves charging position without teleporting when operation resumes
+ok 11 - AGV leaves charging position without teleporting when operation resumes
+  ---
+  duration_ms: 3.39347
+  type: 'test'
+  ...
+# Subtest: an alarm freezes only the affected robot pose
+ok 12 - an alarm freezes only the affected robot pose
+  ---
+  duration_ms: 2.305229
+  type: 'test'
+  ...
+# Subtest: camera cutaway hides near exterior wall and restores it on return
+ok 13 - camera cutaway hides near exterior wall and restores it on return
+  ---
+  duration_ms: 0.599284
+  type: 'test'
+  ...
+# Subtest: contact-shadow coordinates follow AGVs and contain finite positive radii
+ok 14 - contact-shadow coordinates follow AGVs and contain finite positive radii
+  ---
+  duration_ms: 1.833497
+  type: 'test'
+  ...
+# Subtest: baseline: eight connected devices, seven running, one idle
+ok 15 - baseline: eight connected devices, seven running, one idle
+  ---
+  duration_ms: 3.170457
+  type: 'test'
+  ...
+# Subtest: identical seeds produce repeatable telemetry
+ok 16 - identical seeds produce repeatable telemetry
+  ---
+  duration_ms: 1.697337
+  type: 'test'
+  ...
+# Subtest: unpaused telemetry updates temperature and integrates energy
+ok 17 - unpaused telemetry updates temperature and integrates energy
+  ---
+  duration_ms: 1.407315
+  type: 'test'
+  ...
+# Subtest: completed production follows cycles, not display frames
+ok 18 - completed production follows cycles, not display frames
+  ---
+  duration_ms: 0.650303
+  type: 'test'
+  ...
+# Subtest: pause freezes all telemetry and accumulation
+ok 19 - pause freezes all telemetry and accumulation
+  ---
+  duration_ms: 0.347825
+  type: 'test'
+  ...
+# Subtest: alarm marks device and exceeds the 80 C threshold
+ok 20 - alarm marks device and exceeds the 80 C threshold
+  ---
+  duration_ms: 0.455412
+  type: 'test'
+  ...
+# Subtest: alarm stops only the affected device production
+ok 21 - alarm stops only the affected device production
+  ---
+  duration_ms: 0.461538
+  type: 'test'
+  ...
+# Subtest: duplicate alarm calls are idempotent
+ok 22 - duplicate alarm calls are idempotent
+  ---
+  duration_ms: 0.287392
+  type: 'test'
+  ...
+# Subtest: recovery restores state and clears alarm
+ok 23 - recovery restores state and clears alarm
+  ---
+  duration_ms: 1.09121
+  type: 'test'
+  ...
+# Subtest: recovery restores prior idle state rather than forcing operation
+ok 24 - recovery restores prior idle state rather than forcing operation
+  ---
+  duration_ms: 0.71909
+  type: 'test'
+  ...
+# Subtest: an alarm cannot be overridden with the standby control
+ok 25 - an alarm cannot be overridden with the standby control
+  ---
+  duration_ms: 0.39806
+  type: 'test'
+  ...
+# Subtest: standby then resume transitions
+ok 26 - standby then resume transitions
+  ---
+  duration_ms: 2.037888
+  type: 'test'
+  ...
+# Subtest: offline state updates connectivity and consumes zero power
+ok 27 - offline state updates connectivity and consumes zero power
+  ---
+  duration_ms: 0.394361
+  type: 'test'
+  ...
+# Subtest: offline device rejects alarm injection
+ok 28 - offline device rejects alarm injection
+  ---
+  duration_ms: 0.770604
+  type: 'test'
+  ...
+# Subtest: temperature history stays bounded at forty samples
+ok 29 - temperature history stays bounded at forty samples
+  ---
+  duration_ms: 11.370901
+  type: 'test'
+  ...
+# Subtest: invalid device input is rejected without mutation
+ok 30 - invalid device input is rejected without mutation
+  ---
+  duration_ms: 0.240897
+  type: 'test'
+  ...
+# Subtest: negative elapsed time cannot reverse simulation
+ok 31 - negative elapsed time cannot reverse simulation
+  ---
+  duration_ms: 0.152119
+  type: 'test'
+  ...
+# Subtest: matrix multiplication, translation and rotation are consistent
+ok 32 - matrix multiplication, translation and rotation are consistent
+  ---
+  duration_ms: 0.305295
+  type: 'test'
+  ...
+# Subtest: beveled geometry has finite positions and unit normals
+ok 33 - beveled geometry has finite positions and unit normals
+  ---
+  duration_ms: 3.357711
+  type: 'test'
+  ...
+# Subtest: scene graph inherits device IDs and composes transforms
+ok 34 - scene graph inherits device IDs and composes transforms
+  ---
+  duration_ms: 0.466731
+  type: 'test'
+  ...
+# Subtest: offline build contains all runtime code and no external dependency tags
+ok 35 - offline build contains all runtime code and no external dependency tags
+  ---
+  duration_ms: 1.22808
+  type: 'test'
+  ...
+1..35
+# tests 35
+# suites 0
+# pass 35
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1554.862766

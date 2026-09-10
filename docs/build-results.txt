@@ -1,0 +1,5 @@
+
+> factory-twin@2.0.0 build
+> node scripts/build.cjs
+
+Built offline HTML (126.8 KB). No network dependencies.

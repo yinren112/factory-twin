@@ -1,0 +1,58 @@
+[
+  {
+    "path": "/",
+    "status": 200,
+    "bytes": 10439,
+    "matches_local": true,
+    "sha256": "e72d7a0c8ed944a0e0fa5f7f45674e95d18b5264424a6da121e2471ed909581e"
+  },
+  {
+    "path": "/src/engine.js",
+    "status": 200,
+    "bytes": 35834,
+    "matches_local": true,
+    "sha256": "35783525e2f20b2980f10ce08303c91d776e2aefbbfc751c611f67f3ad4423cb"
+  },
+  {
+    "path": "/src/factory.js",
+    "status": 200,
+    "bytes": 40860,
+    "matches_local": true,
+    "sha256": "8d567e02b638834175bfb8c816229a30394a96f04626c0b1e4c0260b22847b2e"
+  },
+  {
+    "path": "/src/app.js",
+    "status": 200,
+    "bytes": 17323,
+    "matches_local": true,
+    "sha256": "16e75961547361a45bcce0138a12cfa933c8adc25d74a15c06ff51a8286cc36e"
+  },
+  {
+    "path": "/src/telemetry.js",
+    "status": 200,
+    "bytes": 3900,
+    "matches_local": true,
+    "sha256": "70cb81d3ad11defc3fac07456cc30947893f25e2b53111c5c0a474f4920ca381"
+  },
+  {
+    "path": "/src/styles.css",
+    "status": 200,
+    "bytes": 21607,
+    "matches_local": true,
+    "sha256": "e84e56b798aa7ca23137c3b2e09ce047077d0dd9554162b784d08f18d316d83a"
+  },
+  {
+    "path": "/dist/index.html",
+    "status": 200,
+    "bytes": 129862,
+    "matches_local": true,
+    "sha256": "a9de7aa7448b47758881a79375c31af9f1ee3be8525877972e4adbc735a3a07c"
+  },
+  {
+    "path": "/factory-twin-offline.html",
+    "status": 200,
+    "bytes": 129862,
+    "matches_local": true,
+    "sha256": "a9de7aa7448b47758881a79375c31af9f1ee3be8525877972e4adbc735a3a07c"
+  }
+]

@@ -1,0 +1,14 @@
+READY {'meshes': 340, 'sceneTriangles': 203256, 'geometryBuffers': 340, 'errors': []}
+SHOT overview
+SHOT robot-side
+SHOT robot-reverse
+SHOT cnc
+SHOT pack
+SHOT agv
+SHOT qc
+SHOT alarm
+SHOT top
+SHOT reverse
+SHOT eye-level
+SHOT hero
+FINISHED 12 views; errors: []

@@ -1,0 +1,288 @@
+{
+  "passed": true,
+  "count": 29,
+  "browser": "151.0.7922.34",
+  "loadMode": "set_content with unchanged offline artifact",
+  "renderer": "Chromium / ANGLE SwiftShader (software)",
+  "build_sha256": "c0d3f4c7c6d58ee2260d46c804320223ac7e2c3672ed115836ab99676ec8033a",
+  "initialRender": {
+    "quality": "high",
+    "width": 1290,
+    "height": 879,
+    "fps": 0,
+    "drawCalls": 958,
+    "triangles": 609304,
+    "hdr": true,
+    "msaa": 4,
+    "contextLost": false
+  },
+  "checks": [
+    {
+      "test": "WebGL scene initializes",
+      "passed": true
+    },
+    {
+      "test": "8 devices and initial 7 running / 1 standby",
+      "passed": true
+    },
+    {
+      "test": "Real GPU geometry, shadow / reflection rendering active",
+      "passed": true,
+      "detail": {
+        "quality": "high",
+        "width": 1290,
+        "height": 879,
+        "fps": 0,
+        "drawCalls": 958,
+        "triangles": 609304,
+        "hdr": true,
+        "msaa": 4,
+        "contextLost": false
+      }
+    },
+    {
+      "test": "Telemetry advances while simulation is running",
+      "passed": true
+    },
+    {
+      "test": "Pause freezes telemetry values",
+      "passed": true
+    },
+    {
+      "test": "Device chip switches information panel",
+      "passed": true
+    },
+    {
+      "test": "3D mesh ID-buffer picking selects the clicked CNC",
+      "passed": true,
+      "detail": {
+        "seconds": 11.267699999999998,
+        "paused": true,
+        "alarm": null,
+        "summary": {
+          "running": 7,
+          "idle": 1,
+          "alarms": 0,
+          "online": 8,
+          "power": 33.01615327467583,
+          "output": 12481,
+          "efficiency": 93.75369046521061,
+          "energy": 286.503814992878
+        },
+        "devices": [
+          {
+            "id": 1,
+            "code": "CV-01",
+            "state": "running",
+            "online": true,
+            "temperature": 44.95363408980129,
+            "power": 3.493834149375558,
+            "output": 198,
+            "cycle": 6.994992604684085
+          },
+          {
+            "id": 2,
+            "code": "RB-01",
+            "state": "running",
+            "online": true,
+            "temperature": 44.85867162667033,
+            "power": 4.282674362867139,
+            "output": 215,
+            "cycle": 7.7782033505290755
+          },
+          {
+            "id": 3,
+            "code": "RB-02",
+            "state": "running",
+            "online": true,
+            "temperature": 45.70079146991287,
+            "power": 4.3194119808990505,
+            "output": 232,
+            "cycle": 6.213649244997651
+          },
+          {
+            "id": 4,
+            "code": "CNC-01",
+            "state": "running",
+            "online": true,
+            "temperature": 48.00626278189373,
+            "power": 11.530010738595388,
+            "output": 249,
+            "cycle": 6.99997701857239
+          },
+          {
+            "id": 5,
+            "code": "QC-01",
+            "state": "running",
+            "online": true,
+            "temperature": 51.33925330853868,
+            "power": 1.282166447280906,
+            "output": 266,
+            "cycle": 7.771589704807848
+          },
+          {
+            "id": 6,
+            "code": "PK-01",
+            "state": "running",
+            "online": true,
+            "temperature": 54.2169535000784,
+            "power": 6.317717901610769,
+            "output": 12481,
+            "cycle": 6.237418484240771
+          },
+          {
+            "id": 7,
+            "code": "AGV-01",
+            "state": "running",
+            "online": true,
+            "temperature": 56.11278867454841,
+            "power": 1.7588376940470187,
+            "output": 300,
+            "cycle": 6.977910337168724
+          },
+          {
+            "id": 8,
+            "code": "AGV-02",
+            "state": "idle",
+            "online": true,
+            "temperature": 51.52859428967349,
+            "power": 0.0315,
+            "output": 316,
+            "cycle": 7.800000000000001
+          }
+        ],
+        "events": [],
+        "selected": 4,
+        "camera": {
+          "target": [
+            0,
+            1.45,
+            0
+          ],
+          "distance": 47,
+          "theta": 0.57,
+          "phi": 1.01,
+          "touring": false
+        },
+        "render": {
+          "quality": "balanced",
+          "width": 1032,
+          "height": 703,
+          "fps": 1,
+          "drawCalls": 621,
+          "triangles": 406156,
+          "hdr": true,
+          "msaa": 4,
+          "contextLost": false
+        }
+      }
+    },
+    {
+      "test": "Orbit rotation responds to pointer drag",
+      "passed": true
+    },
+    {
+      "test": "Wheel zoom changes camera distance",
+      "passed": true
+    },
+    {
+      "test": "Right-button drag pans camera target",
+      "passed": true
+    },
+    {
+      "test": "Focus flies camera to selected equipment",
+      "passed": true
+    },
+    {
+      "test": "Robots and AGV change pose during simulation",
+      "passed": true
+    },
+    {
+      "test": "Standby transition updates panel and state",
+      "passed": true
+    },
+    {
+      "test": "Resume transition restores running state",
+      "passed": true
+    },
+    {
+      "test": "Offline simulation changes online count and power",
+      "passed": true
+    },
+    {
+      "test": "Reconnect restores prior running state",
+      "passed": true
+    },
+    {
+      "test": "Alarm synchronizes device, counter, panel and temperature",
+      "passed": true
+    },
+    {
+      "test": "3D alarm label is marked and reset action is available",
+      "passed": true
+    },
+    {
+      "test": "Alarm freezes affected robot, other robot continues",
+      "passed": true
+    },
+    {
+      "test": "Reset clears alarm and restores equipment",
+      "passed": true
+    },
+    {
+      "test": "Top view control changes camera elevation",
+      "passed": true
+    },
+    {
+      "test": "Camera cruise rotates without simulated-data changes",
+      "passed": true
+    },
+    {
+      "test": "Label visibility toggle works",
+      "passed": true
+    },
+    {
+      "test": "High quality can be restored",
+      "passed": true
+    },
+    {
+      "test": "Balanced quality switch remains renderable",
+      "passed": true
+    },
+    {
+      "test": "1280 x 800 layout has no horizontal overflow",
+      "passed": true
+    },
+    {
+      "test": "390 x 844 responsive layout renders with no horizontal overflow",
+      "passed": true
+    },
+    {
+      "test": "No external assets or API calls needed",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "test": "No JavaScript, GLSL or framebuffer errors",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "warnings": [
+    "[.WebGL-0x23ec001c4200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x23ec001c4200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x23ec001c4200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x23ec001c4200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ],
+  "externalRequests": [],
+  "screenshots": [
+    "01-overview.png",
+    "02-robot-detail.png",
+    "03-alarm-focus.png",
+    "04-alarm-overview.png",
+    "05-top-view.png",
+    "06-agv-detail.png",
+    "07-mobile.png"
+  ]
+}

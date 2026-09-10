@@ -1,0 +1,377 @@
+{
+  "round": "round-1",
+  "views": [
+    {
+      "name": "overview",
+      "camera": {
+        "target": [
+          0,
+          0.7,
+          0
+        ],
+        "distance": 45,
+        "theta": 0.62,
+        "phi": 0.97
+      },
+      "cinematic": false,
+      "eye": [
+        21.567942129354112,
+        26.138478902215947,
+        30.211052008269203
+      ],
+      "contextError": 0
+    },
+    {
+      "name": "robot",
+      "camera": {
+        "target": [
+          4,
+          1.9,
+          1.6
+        ],
+        "distance": 11.0,
+        "theta": 0.73,
+        "phi": 1.08
+      },
+      "cinematic": false,
+      "eye": [
+        10.469659688426296,
+        7.08461200591114,
+        8.829336198027718
+      ],
+      "contextError": 0
+    },
+    {
+      "name": "cnc",
+      "camera": {
+        "target": [
+          -3.6,
+          1.85,
+          -5.5
+        ],
+        "distance": 10.0,
+        "theta": 0.4,
+        "phi": 1.16
+      },
+      "cinematic": false,
+      "eye": [
+        -0.029800531586811285,
+        5.8433952940627325,
+        2.9443158267025886
+      ],
+      "contextError": 0
+    },
+    {
+      "name": "reverse",
+      "camera": {
+        "target": [
+          0,
+          1,
+          -1.4
+        ],
+        "distance": 42,
+        "theta": 3.9,
+        "phi": 0.99
+      },
+      "cinematic": false,
+      "eye": [
+        -24.149595803764328,
+        24.044974144426675,
+        -26.889727130699423
+      ],
+      "contextError": 0
+    },
+    {
+      "name": "agv",
+      "camera": {
+        "target": [
+          10.5,
+          0.65,
+          8
+        ],
+        "distance": 7.1,
+        "theta": 0.5,
+        "phi": 1.14
+      },
+      "cinematic": false,
+      "eye": [
+        13.592916933211159,
+        3.614920978104343,
+        13.661546470519557
+      ],
+      "contextError": 0
+    },
+    {
+      "name": "hero",
+      "camera": {
+        "target": [
+          0.0,
+          1.0,
+          -0.6
+        ],
+        "distance": 34.5,
+        "theta": 0.66,
+        "phi": 1.02
+      },
+      "cinematic": true,
+      "eye": [
+        18.024241684582154,
+        19.05612531818191,
+        22.62397576191211
+      ],
+      "contextError": 0
+    }
+  ],
+  "loading_method": "Unchanged offline HTML via set_content on a fresh about:blank page. Local URL navigation failed in environment preflight.",
+  "initial": {
+    "seconds": 0,
+    "paused": true,
+    "alarm": null,
+    "summary": {
+      "running": 7,
+      "idle": 1,
+      "alarms": 0,
+      "online": 8,
+      "power": 33.4,
+      "output": 12480,
+      "efficiency": 93.6,
+      "energy": 286.4
+    },
+    "devices": [
+      {
+        "id": 1,
+        "code": "CV-01",
+        "state": "running",
+        "online": true,
+        "temperature": 43.8,
+        "power": 3.6,
+        "output": 197,
+        "cycle": 7
+      },
+      {
+        "id": 2,
+        "code": "RB-01",
+        "state": "running",
+        "online": true,
+        "temperature": 45.6,
+        "power": 4.2,
+        "output": 214,
+        "cycle": 7.800000000000001
+      },
+      {
+        "id": 3,
+        "code": "RB-02",
+        "state": "running",
+        "online": true,
+        "temperature": 47.4,
+        "power": 4.2,
+        "output": 231,
+        "cycle": 6.2
+      },
+      {
+        "id": 4,
+        "code": "CNC-01",
+        "state": "running",
+        "online": true,
+        "temperature": 49.2,
+        "power": 11.8,
+        "output": 248,
+        "cycle": 7
+      },
+      {
+        "id": 5,
+        "code": "QC-01",
+        "state": "running",
+        "online": true,
+        "temperature": 51,
+        "power": 1.25,
+        "output": 265,
+        "cycle": 7.800000000000001
+      },
+      {
+        "id": 6,
+        "code": "PK-01",
+        "state": "running",
+        "online": true,
+        "temperature": 52.8,
+        "power": 6.2,
+        "output": 12480,
+        "cycle": 6.2
+      },
+      {
+        "id": 7,
+        "code": "AGV-01",
+        "state": "running",
+        "online": true,
+        "temperature": 54.6,
+        "power": 1.8,
+        "output": 299,
+        "cycle": 7
+      },
+      {
+        "id": 8,
+        "code": "AGV-02",
+        "state": "idle",
+        "online": true,
+        "temperature": 56.4,
+        "power": 0.35,
+        "output": 316,
+        "cycle": 7.800000000000001
+      }
+    ],
+    "events": [],
+    "selected": 3,
+    "camera": {
+      "target": [
+        0,
+        0.7,
+        0
+      ],
+      "distance": 45,
+      "theta": 0.62,
+      "phi": 0.97,
+      "touring": false
+    },
+    "render": {
+      "quality": "high",
+      "width": 1130,
+      "height": 839,
+      "fps": 0,
+      "drawCalls": 889,
+      "triangles": 565164,
+      "hdr": true,
+      "msaa": 4,
+      "contextLost": false
+    }
+  },
+  "geometry": {
+    "meshes": 317,
+    "sceneTriangles": 188582,
+    "geometryBuffers": 317,
+    "errors": []
+  },
+  "final": {
+    "seconds": 0,
+    "paused": true,
+    "alarm": null,
+    "summary": {
+      "running": 7,
+      "idle": 1,
+      "alarms": 0,
+      "online": 8,
+      "power": 33.4,
+      "output": 12480,
+      "efficiency": 93.6,
+      "energy": 286.4
+    },
+    "devices": [
+      {
+        "id": 1,
+        "code": "CV-01",
+        "state": "running",
+        "online": true,
+        "temperature": 43.8,
+        "power": 3.6,
+        "output": 197,
+        "cycle": 7
+      },
+      {
+        "id": 2,
+        "code": "RB-01",
+        "state": "running",
+        "online": true,
+        "temperature": 45.6,
+        "power": 4.2,
+        "output": 214,
+        "cycle": 7.800000000000001
+      },
+      {
+        "id": 3,
+        "code": "RB-02",
+        "state": "running",
+        "online": true,
+        "temperature": 47.4,
+        "power": 4.2,
+        "output": 231,
+        "cycle": 6.2
+      },
+      {
+        "id": 4,
+        "code": "CNC-01",
+        "state": "running",
+        "online": true,
+        "temperature": 49.2,
+        "power": 11.8,
+        "output": 248,
+        "cycle": 7
+      },
+      {
+        "id": 5,
+        "code": "QC-01",
+        "state": "running",
+        "online": true,
+        "temperature": 51,
+        "power": 1.25,
+        "output": 265,
+        "cycle": 7.800000000000001
+      },
+      {
+        "id": 6,
+        "code": "PK-01",
+        "state": "running",
+        "online": true,
+        "temperature": 52.8,
+        "power": 6.2,
+        "output": 12480,
+        "cycle": 6.2
+      },
+      {
+        "id": 7,
+        "code": "AGV-01",
+        "state": "running",
+        "online": true,
+        "temperature": 54.6,
+        "power": 1.8,
+        "output": 299,
+        "cycle": 7
+      },
+      {
+        "id": 8,
+        "code": "AGV-02",
+        "state": "idle",
+        "online": true,
+        "temperature": 56.4,
+        "power": 0.35,
+        "output": 316,
+        "cycle": 7.800000000000001
+      }
+    ],
+    "events": [],
+    "selected": 3,
+    "camera": {
+      "target": [
+        -0.0,
+        1,
+        -0.6
+      ],
+      "distance": 34.5,
+      "theta": 0.66,
+      "phi": 1.02,
+      "touring": false
+    },
+    "render": {
+      "quality": "high",
+      "width": 1440,
+      "height": 960,
+      "fps": 0,
+      "drawCalls": 889,
+      "triangles": 565164,
+      "hdr": true,
+      "msaa": 4,
+      "contextLost": false
+    }
+  },
+  "errors": [],
+  "warnings": [],
+  "requests": []
+}

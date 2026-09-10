@@ -1,0 +1,37 @@
+PASS WebGL scene initializes
+PASS 8 devices and initial 7 running / 1 standby
+PASS Real GPU geometry, shadow / reflection rendering active
+PASS Telemetry advances while simulation is running
+SHOT 01-overview.png
+PASS Pause freezes telemetry values
+PASS Device chip switches information panel
+PASS 3D mesh ID-buffer picking selects the clicked CNC
+PASS Orbit rotation responds to pointer drag
+PASS Wheel zoom changes camera distance
+PASS Right-button drag pans camera target
+PASS Focus flies camera to selected equipment
+SHOT 02-robot-detail.png
+PASS Robots and AGV change pose during simulation
+PASS Standby transition updates panel and state
+PASS Resume transition restores running state
+PASS Offline simulation changes online count and power
+PASS Reconnect restores prior running state
+PASS Alarm synchronizes device, counter, panel and temperature
+PASS 3D alarm label is marked and reset action is available
+SHOT 03-alarm-focus.png
+SHOT 04-alarm-overview.png
+PASS Alarm freezes affected robot, other robot continues
+PASS Reset clears alarm and restores equipment
+PASS Top view control changes camera elevation
+SHOT 05-top-view.png
+SHOT 06-agv-detail.png
+PASS Camera cruise rotates without simulated-data changes
+PASS Label visibility toggle works
+PASS High quality can be restored
+PASS Balanced quality switch remains renderable
+PASS 1280 x 800 layout has no horizontal overflow
+PASS 390 x 844 responsive layout renders with no horizontal overflow
+SHOT 07-mobile.png
+PASS No external assets or API calls needed
+PASS No JavaScript, GLSL or framebuffer errors
+COMPLETE 29 checks
