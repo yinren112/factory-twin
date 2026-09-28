@@ -4,12 +4,12 @@
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
-const draw={fillRect(){},fillText(){},beginPath(){},moveTo(){},lineTo(){},stroke(){}};
+const draw={fillRect(){},fillText(){},beginPath(){},moveTo(){},lineTo(){},closePath(){},fill(){},stroke(){}};
 const context={window:{},console,document:{createElement(){return{getContext(){return draw}}}}};
 vm.createContext(context);
-vm.runInContext(fs.readFileSync(path.join(__dirname,'../src/engine.js'),'utf8'),context);
+vm.runInContext(fs.readFileSync(path.join(__dirname,'../js/engine.js'),'utf8'),context);
 context.TwinGL=context.window.TwinGL;
-vm.runInContext(fs.readFileSync(path.join(__dirname,'../src/factory.js'),'utf8'),context);
+vm.runInContext(fs.readFileSync(path.join(__dirname,'../js/factory.js'),'utf8'),context);
 const {M,V,G}=context.TwinGL;
 const factory=context.window.buildFactory({canvasTexture(){return {testStub:true}}});
 const robots=factory.animations.filter(a=>a.type==='robot');

@@ -2,16 +2,16 @@
   "passed": true,
   "count": 29,
   "browser": "151.0.7922.34",
-  "loadMode": "set_content with unchanged offline artifact",
+  "loadMode": "file:// index.html (multi-file)",
   "renderer": "Chromium / ANGLE SwiftShader (software)",
-  "build_sha256": "c0d3f4c7c6d58ee2260d46c804320223ac7e2c3672ed115836ab99676ec8033a",
+  "index_sha256": "78cc73098d075d5dbf59eee2c5162d630cb9d124f918f381c0b2b15953fb5811",
   "initialRender": {
     "quality": "high",
-    "width": 1290,
-    "height": 879,
+    "width": 1080,
+    "height": 952,
     "fps": 0,
-    "drawCalls": 958,
-    "triangles": 609304,
+    "drawCalls": 1000,
+    "triangles": 692720,
     "hdr": true,
     "msaa": 4,
     "contextLost": false
@@ -30,11 +30,11 @@
       "passed": true,
       "detail": {
         "quality": "high",
-        "width": 1290,
-        "height": 879,
+        "width": 1080,
+        "height": 952,
         "fps": 0,
-        "drawCalls": 958,
-        "triangles": 609304,
+        "drawCalls": 1000,
+        "triangles": 692720,
         "hdr": true,
         "msaa": 4,
         "contextLost": false
@@ -49,14 +49,14 @@
       "passed": true
     },
     {
-      "test": "Device chip switches information panel",
+      "test": "Sidebar device row switches information panel",
       "passed": true
     },
     {
       "test": "3D mesh ID-buffer picking selects the clicked CNC",
       "passed": true,
       "detail": {
-        "seconds": 11.267699999999998,
+        "seconds": 22.499100000000006,
         "paused": true,
         "alarm": null,
         "summary": {
@@ -64,10 +64,10 @@
           "idle": 1,
           "alarms": 0,
           "online": 8,
-          "power": 33.01615327467583,
-          "output": 12481,
-          "efficiency": 93.75369046521061,
-          "energy": 286.503814992878
+          "power": 33.026082624209586,
+          "output": 12483,
+          "efficiency": 93.88342768550345,
+          "energy": 286.6068554327176
         },
         "devices": [
           {
@@ -75,77 +75,77 @@
             "code": "CV-01",
             "state": "running",
             "online": true,
-            "temperature": 44.95363408980129,
-            "power": 3.493834149375558,
-            "output": 198,
-            "cycle": 6.994992604684085
+            "temperature": 42.814622217870735,
+            "power": 3.64662910586223,
+            "output": 200,
+            "cycle": 7.030898522455245
           },
           {
             "id": 2,
             "code": "RB-01",
             "state": "running",
             "online": true,
-            "temperature": 44.85867162667033,
-            "power": 4.282674362867139,
-            "output": 215,
-            "cycle": 7.7782033505290755
+            "temperature": 44.06184725927169,
+            "power": 4.137350037236698,
+            "output": 216,
+            "cycle": 7.805784299634397
           },
           {
             "id": 3,
             "code": "RB-02",
             "state": "running",
             "online": true,
-            "temperature": 45.70079146991287,
-            "power": 4.3194119808990505,
-            "output": 232,
-            "cycle": 6.213649244997651
+            "temperature": 46.63640413799836,
+            "power": 4.214140386119485,
+            "output": 234,
+            "cycle": 6.2106967189721765
           },
           {
             "id": 4,
             "code": "CNC-01",
             "state": "running",
             "online": true,
-            "temperature": 48.00626278189373,
-            "power": 11.530010738595388,
-            "output": 249,
-            "cycle": 6.99997701857239
+            "temperature": 50.30210406971075,
+            "power": 11.771184243389405,
+            "output": 251,
+            "cycle": 6.97602981634438
           },
           {
             "id": 5,
             "code": "QC-01",
             "state": "running",
             "online": true,
-            "temperature": 51.33925330853868,
-            "power": 1.282166447280906,
-            "output": 266,
-            "cycle": 7.771589704807848
+            "temperature": 52.74599421668721,
+            "power": 1.256346683029551,
+            "output": 267,
+            "cycle": 7.832293185535819
           },
           {
             "id": 6,
             "code": "PK-01",
             "state": "running",
             "online": true,
-            "temperature": 54.2169535000784,
-            "power": 6.317717901610769,
-            "output": 12481,
-            "cycle": 6.237418484240771
+            "temperature": 53.803526087007086,
+            "power": 6.130177319134585,
+            "output": 12483,
+            "cycle": 6.166870920844376
           },
           {
             "id": 7,
             "code": "AGV-01",
             "state": "running",
             "online": true,
-            "temperature": 56.11278867454841,
-            "power": 1.7588376940470187,
-            "output": 300,
-            "cycle": 6.977910337168724
+            "temperature": 53.77584194835846,
+            "power": 1.8387548494376245,
+            "output": 302,
+            "cycle": 7.030559631492943
           },
           {
             "id": 8,
             "code": "AGV-02",
             "state": "idle",
             "online": true,
-            "temperature": 51.52859428967349,
+            "temperature": 51.45341628284659,
             "power": 0.0315,
             "output": 316,
             "cycle": 7.800000000000001
@@ -153,24 +153,26 @@
         ],
         "events": [],
         "selected": 4,
+        "mode": "free",
+        "night": false,
         "camera": {
           "target": [
             0,
             1.45,
             0
           ],
-          "distance": 47,
+          "distance": 40,
           "theta": 0.57,
           "phi": 1.01,
           "touring": false
         },
         "render": {
           "quality": "balanced",
-          "width": 1032,
-          "height": 703,
+          "width": 864,
+          "height": 762,
           "fps": 1,
-          "drawCalls": 621,
-          "triangles": 406156,
+          "drawCalls": 650,
+          "triangles": 461800,
           "hdr": true,
           "msaa": 4,
           "contextLost": false
@@ -270,10 +272,10 @@
   ],
   "errors": [],
   "warnings": [
-    "[.WebGL-0x23ec001c4200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
-    "[.WebGL-0x23ec001c4200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
-    "[.WebGL-0x23ec001c4200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
-    "[.WebGL-0x23ec001c4200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+    "[.WebGL-0x4e24001a8800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x4e24001a8800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x4e24001a8800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-0x4e24001a8800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
   ],
   "externalRequests": [],
   "screenshots": [

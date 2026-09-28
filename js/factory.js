@@ -4,17 +4,17 @@
 const {V,M,G,Material,Node,mesh,optimize,color,TAU}=TwinGL;
 function buildFactory(renderer){
  const root=new Node('Smart Factory Twin');
- const mats={floor:new Material('#43555e',.42,.08),slab:new Material('#25343d',.5,.2),edge:new Material('#405562',.3,.65),dark:new Material('#19252c',.38,.45),black:new Material('#10191e',.63,.05),steel:new Material('#9aabb4',.29,.78),silver:new Material('#d3dfe1',.28,.65),panel:new Material('#d1d8d7',.38,.15),white:new Material('#edf0e7',.3,.1),wall:new Material('#2f424e',.64,.18),wallDark:new Material('#263940',.5,.3),orange:new Material('#e98435',.26,.12),orangeDark:new Material('#bd591f',.36,.12),yellow:new Material('#d1b674',.44,.08),teal:new Material('#49c8b1',.3,.2),rubber:new Material('#142128',.82,.0),pallet:new Material('#647c84',.5,.45),green:new Material('#76f3ca',.2,.1,1.6),amber:new Material('#ffa561',.25,.1,1.8),red:new Material('#ff6a3d',.24,.15,2),light:new Material('#d7f2ed',.2,.1,2.2),blue:new Material('#60bbd2',.24,.35,1),glass:new Material('#80c4cc',.15,.20,0,.12),glassDark:new Material('#10272f',.12,.58),ink:new Material('#243238',.7),muted:new Material('#7e969d',.7)};
+ const mats={floor:new Material('#43555e',.42,.08),slab:new Material('#25343d',.5,.2),edge:new Material('#405562',.3,.65),dark:new Material('#19252c',.38,.45),black:new Material('#10191e',.63,.05),steel:new Material('#9aabb4',.29,.78),silver:new Material('#d3dfe1',.28,.65),panel:new Material('#d1d8d7',.38,.15),white:new Material('#edf0e7',.3,.1),wall:new Material('#2f424e',.64,.18),wallDark:new Material('#263940',.5,.3),orange:new Material('#e98435',.26,.12),orangeDark:new Material('#bd591f',.36,.12),yellow:new Material('#d1b674',.44,.08),teal:new Material('#4f8467',.55,.05),concrete:new Material('#9da39f',.92,.02),signRed:new Material('#b8322a',.45,.1),rubber:new Material('#142128',.82,.0),pallet:new Material('#647c84',.5,.45),green:new Material('#76f3ca',.2,.1,1.6),amber:new Material('#ffa561',.25,.1,1.8),red:new Material('#ff6a3d',.24,.15,2),light:new Material('#d7f2ed',.2,.1,2.2),blue:new Material('#60bbd2',.24,.35,1),glass:new Material('#80c4cc',.15,.20,0,.12),glassDark:new Material('#10272f',.12,.58),ink:new Material('#243238',.7),muted:new Material('#7e969d',.7)};
  mats.floor.floor=true;
  let geoCache=new Map();const geo=(k,fn)=>{if(!geoCache.has(k))geoCache.set(k,fn());return geoCache.get(k)};
- const box=(p,w,h,d,mat,x=0,y=0,z=0,r=.025,rot=[0,0,0])=>mesh(p,geo(`b${w},${h},${d},${r}`,()=>G.box(w,h,d,r)),mat,[x,y,z],rot);
+ const box=(p,w,h,d,mat,x=0,y=0,z=0,r=.025,rot=[0,0,0])=>(r=Math.min(r,.03),mesh(p,geo(`b${w},${h},${d},${r}`,()=>G.box(w,h,d,r)),mat,[x,y,z],rot));
  const cyl=(p,rt,rb,h,mat,x=0,y=0,z=0,rot=[0,0,0],segments=40)=>mesh(p,geo(`c${rt},${rb},${h},${segments}`,()=>G.cylinder(rt,rb,h,segments)),mat,[x,y,z],rot);
  const torus=(p,r,t,mat,x=0,y=0,z=0,rot=[0,0,0])=>mesh(p,geo(`t${r},${t}`,()=>G.torus(r,t)),mat,[x,y,z],rot);
  const tube=(p,pts,r,mat)=>mesh(p,G.tube(pts,r),mat);
  const group=(p,name,x=0,y=0,z=0,ry=0,dynamic=false)=>{let n=new Node(name).at(x,y,z).rotate(0,ry,0);n.dynamic=dynamic;p.add(n);return n};
  const labelTextures=new Map();
  function text(p,string,w,h,x,y,z,{fg='#bed3d4',bg=null,rotate=[Math.PI/2,0,0],weight=600}={}){
-  let key=[string,fg,bg,w,h,weight].join('|');let mat=labelTextures.get(key);if(!mat){let c=document.createElement('canvas');c.width=1024;c.height=Math.round(1024*h/w);let ctx=c.getContext('2d');if(bg){ctx.fillStyle=bg;ctx.fillRect(0,0,c.width,c.height)}ctx.fillStyle=fg;ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=`${weight} ${Math.floor(c.height*.69)}px Arial, sans-serif`;ctx.fillText(string,c.width/2,c.height/2,c.width*.95);mat=new Material('#ffffff',.8,.0,.25,.98);mat.decal=true;mat.texture=renderer.canvasTexture(c);labelTextures.set(key,mat)}let n=mesh(p,G.plane(w,h),mat,[x,y,z],rotate);n.castShadow=false;return n
+  let key=[string,fg,bg,w,h,weight].join('|');let mat=labelTextures.get(key);if(!mat){let c=document.createElement('canvas');c.width=1024;c.height=Math.round(1024*h/w);let ctx=c.getContext('2d');if(bg){ctx.fillStyle=bg;ctx.fillRect(0,0,c.width,c.height)}ctx.fillStyle=fg;ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=`${weight} ${Math.floor(c.height*.69)}px "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", Arial, sans-serif`;ctx.fillText(string,c.width/2,c.height/2,c.width*.95);mat=new Material('#ffffff',.8,.0,.25,.98);mat.decal=true;mat.texture=renderer.canvasTexture(c);labelTextures.set(key,mat)}let n=mesh(p,G.plane(w,h),mat,[x,y,z],rotate);n.castShadow=false;return n
  }
  const floorText=(s,x,z,w=3,h=.32,fg='#a4b5b5')=>text(root,s,w,h,x,.024,z,{rotate:[0,0,0],fg});
  function bolt(p,x,y,z,r=.045,axis='y'){return cyl(p,r,r,.045,mats.steel,x,y,z,axis==='z'?[Math.PI/2,0,0]:axis==='x'?[0,0,Math.PI/2]:[0,0,0],6)}
@@ -68,17 +68,79 @@ function buildFactory(renderer){
 
  // Architectural shell: open roof and two cutaway facades preserve sight lines.
  box(root,30.4,.5,22.3,mats.slab,0,-.28,.1,.18);box(root,30,.06,22,mats.floor,0,-.015,.1,.04);
- box(root,30,.04,.045,mats.teal,0,-.14,11.28,.005);
- for(let x=-13.8;x<14;x+=2.6){box(root,.7,.03,.16,mats.dark,x,-.52,10.6,.015);box(root,.7,.03,.16,mats.dark,x,-.52,-10.1,.015)}
+ // The production cell sits inside a continuous hall floor, with logistics aprons.
+ const hallFloor=new Material('#647178',.72,.04);hallFloor.floor=true;
+ const hall=group(root,'Factory hall context'),hallBack=group(root,'Hall north cutaway',0,0,0,0,true),hallWest=group(root,'Hall west cutaway',0,0,0,0,true);
+ box(hall,300,.30,240,hallFloor,0,-.20,0,0).castShadow=false;
+ box(hall,66,.055,48,hallFloor,0,-.044,2,.04).castShadow=false;
+ // Aisles continue past the monitored cell; safety lines stay on the floor.
+ for(const x of [-18.1,18.1]){
+  box(hall,3.2,.012,51,mats.wallDark,x,-.007,3,0);
+  for(const dx of [-1.64,1.64])box(hall,.07,.012,51,mats.yellow,x+dx,.004,3,0);
+  for(let z=-18;z<=26;z+=3)box(hall,.09,.012,1.3,mats.muted,x,.005,z,0);
+ }
+ box(hall,66,.012,3.2,mats.wallDark,0,-.006,14.8,0);
+ for(const z of [13.15,16.45])box(hall,66,.014,.075,mats.yellow,0,.006,z,0);
+ for(let x=-30;x<=30;x+=3)box(hall,1.35,.014,.09,mats.muted,x,.009,14.8,0);
+ for(const x of [-18.1,18.1])for(let i=-3;i<=3;i++)box(hall,.28,.015,2.8,mats.white,x+i*.38,.016,11.5,0);
+ // Roof cutaway retains the steel column grid, clerestory and service galleries.
+ const cladding=new Material('#75828a',.78,.08),clerestory=new Material('#a9d0d7',.30,.12,.20);
+ box(hallBack,66,8.8,.24,cladding,0,4.4,-18.5,.015);
+ for(let x=-30;x<=30;x+=6){
+  box(hallBack,5.35,2.1,.08,clerestory,x,6.6,-18.33,.012);
+  for(const dx of [-2.7,0,2.7])box(hallBack,.085,2.23,.12,mats.steel,x+dx,6.6,-18.23,.004);
+  box(hallBack,5.5,.12,.18,mats.dark,x,5.49,-18.2,.015);
+ }
+ for(const x of [-30,-24,-18,-12,-6,0,6,12,18,24,30]){
+  box(hallBack,.26,9.1,.36,mats.edge,x,4.55,-18.05,.015);
+  box(hallBack,.68,.16,.72,mats.steel,x,.08,-18.05,.025);
+  box(hallBack,.35,.22,7,mats.edge,x,8.85,-14.8,.012);
+ }
+ box(hallBack,66,.34,.32,mats.edge,0,8.85,-18.05,.015);
+ box(hallBack,66,.14,6.6,mats.wall,0,9.08,-14.8,.015);
+ for(const z of [-16,-12])box(hallBack,61,.055,.18,mats.light,0,8.93,z,.01);
+ box(hallBack,150,.18,90,mats.wall,0,9.05,-63,.01);
+ for(let x=-72;x<=72;x+=3)box(hallBack,.18,.11,88,mats.wall,x,9.18,-63,.005);
+ for(const x of [-48,-18,18,48])for(const z of [-30,-51,-72]){
+  box(hallBack,13,.18,3.3,mats.steel,x,9.23,z,.03);
+  box(hallBack,12.6,.06,2.9,clerestory,x,9.35,z,.01);
+ }
+ box(hallWest,.25,7.8,43,cladding,-30,3.9,3,.015);
+ for(const z of [-15,-3,9,21]){
+  box(hallWest,.40,8.4,.40,mats.edge,-29.7,4.2,z,.02);
+  box(hallWest,.8,.16,.8,mats.steel,-29.7,.08,z,.02);
+ }
+ // Pallet racking and dispatch buffer give the surrounding floor a purpose.
+ const rackBlue=new Material('#2f6f9a',.5,.3);
+ for(const x of [-24,24])for(const z of [-9,-2,5]){
+  const storage=group(hall,'Material buffer rack',x,0,z);
+  for(const xx of [-1.8,1.8])for(const zz of [-1.1,1.1])box(storage,.095,3.65,.095,rackBlue,xx,1.825,zz,.01);
+  for(const y of [.18,1.35,2.52]){
+   box(storage,3.7,.13,2.32,mats.orange,0,y,0,.015);
+   for(const xx of [-.95,.95]){
+    box(storage,1.55,.12,1.95,mats.pallet,xx,y+.14,0,.015);
+    box(storage,1.4,.73,1.65,mats.muted,xx,y+.57,0,.045);
+    box(storage,.6,.22,.012,mats.white,xx,y+.57,.833,.003);
+   }
+  }
+ }
+ for(let x=-10;x<=12;x+=5.5){
+  for(const dx of [-2,2])box(hall,.065,.013,4.3,mats.yellow,x+dx,.006,21,0);
+  box(hall,4,.013,.065,mats.yellow,x,.006,23.15,0);
+  box(hall,2.5,.16,2,mats.pallet,x,.08,21,.035);
+  for(const dx of [-.62,.62])for(const dz of [-.47,.47])box(hall,1.12,.86,.85,mats.panel,x+dx,.60,21+dz,.025);
+ }
+ text(hall,'物料缓存区',3.2,.62,-23,.018,11,{rotate:[0,0,0],fg:'#d8d4b0'});
+ text(hall,'成品待发区',3.2,.62,0,.018,18,{rotate:[0,0,0],fg:'#d8d4b0'});
+ text(hallBack,'01 号装配车间',5.2,.72,5,8.1,-18.3,{fg:'#e0e7de'});
  // Surface zones, seams, and embedded wayfinding.
  const zoneFloor=new Material('#576d76',.48,.10);zoneFloor.floor=true;box(root,25.2,.012,7.4,zoneFloor,0,.023,-.35,.08);
  for(let x of [-12.7,12.7])box(root,.045,.01,7.6,mats.yellow,x,.044,-.35,0);
  for(let z of [-4.12,3.42])box(root,25.45,.01,.045,mats.yellow,0,.045,z,0);
  const laneFloor=new Material('#304852',.47,.10);laneFloor.floor=true;box(root,27,.01,3.9,laneFloor,0,.021,7.5,.025);
  for(let z of [5.52,9.48])box(root,27,.015,.045,mats.muted,0,.030,z,0);
- for(let x=-12;x<=12;x+=1.45)box(root,.61,.015,.033,mats.teal,x,.04,7.5,0);
- floorText('AUTONOMOUS LOGISTICS',-6.1,9.92,5,.27,'#bdd0ce');floorText('ASSEMBLY / 01',-7.4,4.35,3.5,.38,'#b5c6c3');floorText('PRECISION / 02',3.4,4.35,3.6,.38,'#b5c6c3');
- floorText('L A I L I N',-11.0,1.55,1.7,.29,'#8fa7aa');
+ for(const z of [6.65,8.35])for(let x=-10;x<=7.1;x+=1.2){box(root,.16,.006,.16,mats.white,x,.031,z,0);box(root,.11,.008,.11,mats.black,x,.033,z,0);box(root,.045,.01,.045,mats.white,x+.018,.034,z-.018,0)}
+ floorText('AGV 通道  限速 1 m/s',-6.1,9.92,3.4,.30,'#d8d4b0');floorText('A 区  装配',-7.4,4.35,1.7,.34,'#d8d4b0');floorText('B 区  精装',3.4,4.35,1.7,.34,'#d8d4b0');
  for(let x of [-10,-3.5,3.5,10]){
   const arrow=[[-.45,-.16],[.05,-.16],[.05,-.34],[.52,0],[.05,.34],[.05,.16],[-.45,.16]];
   let g=G.extrude(arrow,.01);mesh(root,g,mats.muted,[x,.034,6.2],[-Math.PI/2,0,0]);
@@ -97,10 +159,9 @@ function buildFactory(renderer){
  for(let yy of [1.0,1.25,1.5]){tube(root,[[-14.57,yy,3.0],[-14.57,yy,-8.6],[-14.2,yy,-9.2],[-12.5,yy,-9.2]],.055,yy===1.5?mats.teal:mats.steel)}
  tube(root,[[-13.7,5.25,-10.22],[-12,5.25,-10.22],[-3,5.25,-10.22],[8,5.25,-10.22],[12.4,5.25,-10.22],[12.8,4.9,-10.22],[12.8,.5,-10.22]],.085,mats.steel);
  for(let x=-12;x<13;x+=2)box(root,.14,.28,.07,mats.dark,x,5.25,-10.23,.01);
- text(northShell,'INTELLIGENT MANUFACTURING  /  DEMO FACILITY',9,.31,1.3,5.15,-10.43,{fg:'#d9e6e0'});
- text(northShell,'01',1,.85,-13.0,2.3,-10.42,{fg:'#a9c2c1'});
+ text(northShell,'安全第一  预防为主',4.2,.40,1.3,5.15,-10.43,{fg:'#e6d9a8'});
  // rear utility cabinets with handles, seams, hinges, vents and emergency stop.
- function cabinet(x,z,number){let g=group(root,'Utility '+number,x,0,z);box(g,1.48,.19,.94,mats.dark,0,.16,0,.03);box(g,1.45,2.8,.86,mats.panel,0,1.63,0,.055);box(g,.032,2.5,.026,mats.dark,0,1.63,.445,.005);for(let xx of [-.60,.60]){for(let yy of [.55,2.5])box(g,.05,.11,.02,mats.steel,xx,yy,.452,.009);box(g,.043,.27,.045,mats.dark,xx*.18,1.52,.476,.012)}vents(g,-.35,.66,.448,.52,.45);vents(g,.35,.66,.448,.52,.45);text(g,'POWER / '+number,.8,.12,0,2.74,.449,{fg:'#2d464e'});box(g,.1,.1,.025,mats.green,-.5,2.5,.455,.02)}
+ function cabinet(x,z,number){let g=group(root,'Utility '+number,x,0,z);box(g,1.48,.19,.94,mats.dark,0,.16,0,.03);box(g,1.45,2.8,.86,mats.panel,0,1.63,0,.055);box(g,.032,2.5,.026,mats.dark,0,1.63,.445,.005);for(let xx of [-.60,.60]){for(let yy of [.55,2.5])box(g,.05,.11,.02,mats.steel,xx,yy,.452,.009);box(g,.043,.27,.045,mats.dark,xx*.18,1.52,.476,.012)}vents(g,-.35,.66,.448,.52,.45);vents(g,.35,.66,.448,.52,.45);text(g,'AP-'+number,.5,.12,0,2.74,.449,{fg:'#2d464e'});warning(g,.42,2.74,.452);box(g,.1,.1,.025,mats.green,-.5,2.5,.455,.02)}
  cabinet(-11.7,-8.8,'01');cabinet(-9.95,-8.8,'02');cabinet(10.6,-8.8,'03');cabinet(12.35,-8.8,'04');
  const devices=[],animations=[];
  function device(id,code,name,type,x,z,state='running'){let node=group(root,code,x,0,z);node.id=id;let d={id,code,name,type,node,anchor:[x,3,z],focus:[x,1.6,z],state,online:true,temperature:42+id*1.8,power:.8+id*.4,output:180+id*17,cycle:6.2+(id%3)*.8,history:[],setLamps:()=>{}};devices.push(d);return d}
@@ -127,7 +188,7 @@ function buildFactory(renderer){
  // Articulated robots, formed casing, axis covers, cast ribs, exposed fasteners, dress packs.
  function robot(id,code,x,z,phase){
   let d=device(id,code,id===2?'上料协作机器人':'精密装配机器人','PRECISION / 6-AXIS',x,z);
-  d.anchor=[x,4.55,z];d.focus=[x,1.90,z-.25];d.power=4.2;const g=d.node;
+  d.anchor=[x,3.35,z];d.focus=[x,1.90,z-.25];d.power=4.2;const g=d.node;
   hazard(g,0,0,2.7,2.1);box(g,1.64,.20,1.57,mats.dark,0,.145,0,.06);
   for(let xx of [-.63,.63])for(let zz of [-.60,.60]){cyl(g,.12,.12,.027,mats.steel,xx,.26,zz);bolt(g,xx,.286,zz,.072)}
   cyl(g,.62,.68,.33,mats.orange,0,.41,0,[0,0,0],56);cyl(g,.62,.62,.10,mats.dark,0,.62,0,[0,0,0],56);
@@ -150,8 +211,7 @@ function buildFactory(renderer){
    box(shoulder,.09,.94,.03,mats.orange,-.04,1.00,side*.345,.038);
    for(const yy of [.47,1.49])bolt(shoulder,-.07,yy,side*.356,.026,'z');
   }
-  text(shoulder,'L A I L I N',.39,.09,0,1.20,.352,{fg:'#ffdab9'});
-  // Continuous anchored dress pack along the outer flank, clear of the casting.
+    // Continuous anchored dress pack along the outer flank, clear of the casting.
   tube(shoulder,[[-.39,.07,-.30],[-.52,.32,-.35],[-.52,.62,-.40],[-.46,1.2,-.40],[-.41,1.62,-.36],[-.29,1.90,-.34]],.065,mats.rubber);
   for(let yy=.37;yy<1.62;yy+=.105){let xx=-.53+(yy-.37)*.10;torus(shoulder,.067,.010,mats.edge,xx,yy,-.40)}
   for(let yy of [.45,1.4])box(shoulder,.16,.09,.27,mats.dark,-.40,yy,-.31,.02);
@@ -190,7 +250,7 @@ function buildFactory(renderer){
  const rb1=robot(2,'RB-01',-5.2,2.25,0),rb2=robot(3,'RB-02',4.0,2.25,1.7);
  rail(root,-7.35,1.9,-7.35,3.7);rail(root,-7.35,3.7,-3.1,3.7);rail(root,1.9,3.7,6.25,3.7);rail(root,6.25,3.7,6.25,1.9);
  // Machine housings: CNC cell with recessed glazing and visible spindle interior.
- let cnc=device(4,'CNC-01','精密加工中心','MACHINING CENTER',-3.6,-5.7);cnc.anchor=[-3.6,3.65,-5.7];cnc.focus=[-3.6,1.7,-5.7];cnc.power=11.8;
+ let cnc=device(4,'CNC-01','精密加工中心','MACHINING CENTER',-3.6,-5.7);cnc.anchor=[-3.6,3.42,-5.7];cnc.focus=[-3.6,1.7,-5.7];cnc.power=11.8;
  let ng=cnc.node;box(ng,4.6,.28,2.9,mats.dark,0,.2,0,.1);box(ng,4.45,.52,2.78,mats.panel,0,.6,0,.09);box(ng,4.45,.36,2.78,mats.white,0,3.2,0,.1);box(ng,.63,2.3,2.7,mats.panel,-1.89,1.91,0,.08);box(ng,.88,2.3,2.7,mats.panel,1.76,1.91,0,.08);box(ng,3.9,2.7,.18,mats.dark,-.04,1.89,-1.27,.04);
 
  box(ng,3.18,2.20,.15,mats.wallDark,-.18,1.90,-1.14,.03);
@@ -214,34 +274,32 @@ function buildFactory(renderer){
  for(let xx of [-1.10,.51]){box(ng,1.48,1.9,.045,mats.glass,xx,2.02,1.42,.02);for(let dx of [-.75,.75])box(ng,.065,1.98,.1,mats.steel,xx+dx,2.02,1.43,.01);box(ng,1.56,.065,.1,mats.steel,xx,1.02,1.43,.01);box(ng,1.56,.065,.1,mats.steel,xx,3.02,1.43,.01)}
  for(let xx of [-.48,-.18])box(ng,.06,.64,.12,mats.dark,xx,1.87,1.51,.025);
  box(ng,4.36,.065,.055,mats.teal,0,3.29,1.43,.015);screen(ng,.48,.40,1.75,2.46,1.40,'CNC / 01');cyl(ng,.085,.085,.04,mats.red,1.94,1.92,1.5,[Math.PI/2,0,0]);vents(ng,1.74,1.24,1.42,.52,.5);
- text(ng,'PRECISION  /  CNC',1.94,.16,-.72,3.22,1.423,{fg:'#273d45'});cnc.setLamps=statusTower(ng,1.79,3.40,-.9);
+ text(ng,'CNC-01',.7,.16,-.72,3.22,1.423,{fg:'#273d45'});cnc.setLamps=statusTower(ng,1.79,3.40,-.9);
 
  // CNC sheet-metal service seams, slide tracks, panel screws and cable gland block.
  for(const zz of [-1.09,.89])for(const xx of [-2.236,2.236])box(ng,.014,2.21,.024,mats.dark,xx,1.85,zz,.004);
  for(const yy of [.9,3.01])box(ng,3.34,.038,.10,mats.dark,-.21,yy,1.48,.01);
  for(const xx of [-2.04,1.54,2.00])for(const yy of [.94,2.88])bolt(ng,xx,yy,1.45,.029,'z');
  for(const yy of [1.2,2.7])box(ng,.13,.18,.07,mats.steel,-1.84,yy,1.47,.02);
- warning(ng,1.73,1.90,1.46);text(ng,'AXIS  X / Y / Z',.58,.065,1.75,2.09,1.49,{fg:'#465f68'});
- text(ng,'LL-M500',.58,.105,1.72,.65,1.411,{fg:'#586b71'});
+ warning(ng,1.73,1.90,1.46);text(ng,'VMC-850',.58,.105,1.72,.65,1.411,{fg:'#586b71'});
  // Side-mounted closed cooling unit, protected within the machinery service zone.
  box(ng,.55,1.38,1.11,mats.panel,-2.51,1.22,-.24,.075);
  for(let yy of [.91,1.43])coolingFan(ng,-2.51,yy,.335,.20);
  tube(ng,[[-2.53,1.88,-.4],[-2.53,2.30,-.59],[-2.20,2.45,-.68]],.056,mats.black);
  // Input magazine / feeder.
  let feeder=group(root,'Feed magazine',-9.25,0,-4.9);
- box(feeder,2.55,.26,2.2,mats.dark,0,.2,0,.07);box(feeder,2.42,1.66,2.08,mats.panel,0,1.15,0,.08);box(feeder,2.47,.12,2.12,mats.steel,0,2.04,0,.025);for(let x of [-.84,0,.84]){box(feeder,.68,.75,1.6,mats.dark,x,2.48,0,.04);for(let y=2.17;y<2.83;y+=.16)box(feeder,.59,.10,1.37,mats.steel,x,y,0,.022)}screen(feeder,.53,.33,-.52,1.56,1.07,'FEED');vents(feeder,.48,.8,1.05,.65,.43);text(feeder,'AUTOMATIC FEED',1.67,.15,0,1.86,1.046,{fg:'#324951'});
+ box(feeder,2.55,.26,2.2,mats.dark,0,.2,0,.07);box(feeder,2.42,1.66,2.08,mats.panel,0,1.15,0,.08);box(feeder,2.47,.12,2.12,mats.steel,0,2.04,0,.025);for(let x of [-.84,0,.84]){box(feeder,.68,.75,1.6,mats.dark,x,2.48,0,.04);for(let y=2.17;y<2.83;y+=.16)box(feeder,.59,.10,1.37,mats.steel,x,y,0,.022)}screen(feeder,.53,.33,-.52,1.56,1.07,'FEED');vents(feeder,.48,.8,1.05,.65,.43);text(feeder,'上料仓',.62,.15,0,1.86,1.046,{fg:'#324951'});
  // Vision tunnel surrounding the moving conveyor.
- let qc=device(5,'QC-01','在线视觉检测','VISION INSPECTION',7.6,.15);qc.anchor=[7.6,3.3,.15];qc.focus=[7.6,1.8,.15];qc.power=1.25;
+ let qc=device(5,'QC-01','在线视觉检测','VISION INSPECTION',7.6,.15);qc.anchor=[7.6,3.1,.15];qc.focus=[7.6,1.8,.15];qc.power=1.25;
  let qg=qc.node;for(let zz of [-1.02,1.02]){box(qg,.64,2.63,.26,mats.panel,0,1.40,zz,.07);box(qg,1.10,.10,.55,mats.dark,0,.08,zz,.025);for(const xx of [-.38,.38])bolt(qg,xx,.15,zz,.047)}box(qg,.91,.48,2.4,mats.white,0,2.81,0,.12);box(qg,.1,.75,.12,mats.dark,0,2.19,0,.035);cyl(qg,.17,.17,.26,mats.dark,0,2.29,0);cyl(qg,.108,.108,.04,mats.blue,0,2.13,0);torus(qg,.128,.019,mats.silver,0,2.11,0);for(let xx of [-.27,.27])box(qg,.06,.04,1.8,mats.light,xx,2.54,0,.017);
  for(let zz of [-.87,.87])box(qg,.032,1.5,.032,mats.blue,0,1.88,zz,.008);box(qg,.036,.016,1.65,mats.blue,0,1.435,0,.007);
- let scan=box(qg,.018,1.25,1.6,new Material('#62cbcc',.5,0,.4,.13),0,2.03,0,0);scan.castShadow=false;
- for(const zz of [-1.02,1.02]){box(qg,.036,2.2,.035,mats.dark,-.22,1.4,zz+.15,.008);for(const yy of [.42,2.25])bolt(qg,0,yy,zz+Math.sign(zz)*.148,.032,'z')}
- text(qg,'VISION',.61,.14,0,2.79,1.227,{fg:'#263d48'});qc.setLamps=statusTower(qg,.14,3.08,-.83);
+  for(const zz of [-1.02,1.02]){box(qg,.036,2.2,.035,mats.dark,-.22,1.4,zz+.15,.008);for(const yy of [.42,2.25])bolt(qg,0,yy,zz+Math.sign(zz)*.148,.032,'z')}
+ text(qg,'QC-01',.5,.14,0,2.79,1.227,{fg:'#263d48'});qc.setLamps=statusTower(qg,.14,3.08,-.83);
  // End-of-line packaging, segmented roll-up safety door and pallet staging.
- let pack=device(6,'PK-01','自动封装单元','PACKAGING CELL',8.0,-5.45);pack.anchor=[8,3.66,-5.45];pack.focus=[8,1.8,-5.45];pack.power=6.2;
+ let pack=device(6,'PK-01','自动封装单元','PACKAGING CELL',8.0,-5.45);pack.anchor=[8,3.35,-5.45];pack.focus=[8,1.8,-5.45];pack.power=6.2;
  let pg=pack.node;box(pg,4.1,.24,2.72,mats.dark,0,.21,0,.07);box(pg,3.99,.62,2.62,mats.panel,0,.61,0,.06);for(let xx of [-1.67,1.67])box(pg,.59,2.31,2.57,mats.panel,xx,1.99,0,.07);box(pg,3.99,.40,2.62,mats.white,0,3.07,0,.07);
  box(pg,2.53,2.04,.065,mats.glassDark,0,1.9,-1.27,.03);box(pg,2.37,.17,2.13,mats.steel,0,1.12,0,.025);for(let xx of [-.9,.9]){box(pg,.095,1.6,.095,mats.steel,xx,2.02,.22,.015)}box(pg,2.00,.30,.81,mats.orange,0,2.60,.20,.05);box(pg,.85,.34,.78,mats.pallet,0,1.39,.2,.02);
- for(let xx of [-1.31,1.31])box(pg,.06,2.04,.07,mats.steel,xx,1.92,1.35,.01);for(let yy of [1.02,2.94])box(pg,2.69,.065,.07,mats.steel,0,yy,1.35,.01);box(pg,2.60,1.8,.016,mats.glass,0,2.00,1.35,.005);box(pg,3.91,.055,.045,mats.teal,0,3.12,1.35,.01);screen(pg,.48,.38,1.64,2.45,1.34,'PACK / 01');vents(pg,1.62,1.36,1.322,.40,.45);text(pg,'MODULAR PACKAGING',2.34,.16,-.32,3.055,1.342,{fg:'#2e454c'});pack.setLamps=statusTower(pg,1.56,3.31,-.9);
+ for(let xx of [-1.31,1.31])box(pg,.06,2.04,.07,mats.steel,xx,1.92,1.35,.01);for(let yy of [1.02,2.94])box(pg,2.69,.065,.07,mats.steel,0,yy,1.35,.01);box(pg,2.60,1.8,.016,mats.glass,0,2.00,1.35,.005);box(pg,3.91,.055,.045,mats.teal,0,3.12,1.35,.01);screen(pg,.48,.38,1.64,2.45,1.34,'PACK / 01');vents(pg,1.62,1.36,1.322,.40,.45);text(pg,'PK-01',.62,.16,-.32,3.055,1.342,{fg:'#2e454c'});pack.setLamps=statusTower(pg,1.56,3.31,-.9);
 
  for(const xx of [-1.55,1.55])for(const zz of [-1.04,1.02])foot(pg,xx,zz);
  for(let xx=-1.04;xx<1.1;xx+=.22){cyl(pg,.085,.085,1.70,mats.steel,xx,1.235,.08,[Math.PI/2,0,0],24);cyl(pg,.052,.052,1.76,mats.dark,xx,1.235,.08,[Math.PI/2,0,0],20)}
@@ -256,13 +314,13 @@ function buildFactory(renderer){
  for(const yy of [1.31,2.40]){cyl(pg,.21,.21,1.62,mats.white,-2.22,yy,0,[Math.PI/2,0,0],40);for(const zz of [-.85,.85])cyl(pg,.24,.24,.035,mats.steel,-2.22,yy,zz,[Math.PI/2,0,0],40)}
  for(const zz of [-.83,.83])box(pg,.08,1.63,.09,mats.dark,-2.22,1.72,zz,.016);
  box(pg,.50,.66,.16,mats.dark,2.05,1.48,.80,.04);for(const xx of [1.91,2.12]){cyl(pg,.06,.06,.30,mats.steel,xx,1.32,.91);cyl(pg,.08,.08,.11,mats.blue,xx,1.56,.91)}
- text(pg,'SEAL / PACK',.61,.09,1.63,1.91,1.34,{fg:'#3a5360'});warning(pg,1.66,2.08,1.36);
+ warning(pg,1.66,2.08,1.36);
  // Service pallet with nested payloads.
  function palletStack(x,z){let g=group(root,'Pallet staging',x,0,z);for(let zz of [-.56,0,.56])box(g,1.6,.12,.20,mats.pallet,0,.18,zz,.01);for(let xx of [-.65,0,.65])box(g,.2,.14,1.35,mats.dark,xx,.11,0,.01);for(let x2 of [-.4,.4])for(let z2 of [-.35,.35]){box(g,.67,.52,.59,mats.panel,x2,.52,z2,.055);box(g,.69,.05,.6,mats.dark,x2,.81,z2,.008);box(g,.037,.58,.01,mats.teal,x2,.53,z2+.30,.002)}}
  palletStack(12.3,3.22);palletStack(-11.0,3.32);
  // AGVs with wheel assemblies, collision bumpers, LiDAR, scanning arc and stack lights.
  function agv(id,code,x,z,state){let d=device(id,code,id===7?'自主搬运 AGV':'待命搬运 AGV','AUTONOMOUS VEHICLE',x,z,state);d.node.dynamic=true;d.anchor=[x,1.7,z];d.focus=[x,.8,z];d.power=id===7?1.8:.35;
-  let g=d.node;box(g,1.95,.23,1.38,mats.dark,0,.32,0,.15);box(g,1.91,.43,1.31,mats.panel,0,.59,0,.17);box(g,1.96,.018,1.35,mats.black,0,.798,0,.08);box(g,1.86,.085,1.27,mats.white,0,.847,0,.075);box(g,1.96,.055,1.32,mats.teal,0,.45,0,.09);
+  let g=d.node;box(g,1.95,.23,1.38,mats.dark,0,.32,0,.15);box(g,1.91,.43,1.31,mats.panel,0,.59,0,.17);box(g,1.96,.018,1.35,mats.black,0,.798,0,.08);box(g,1.86,.085,1.27,mats.white,0,.847,0,.075);box(g,1.96,.055,1.32,mats.yellow,0,.45,0,.03);
   const wheels=[];
   for(let xx of [-.58,.58])for(let zz of [-.68,.68]){
    const w=group(g,'Driven wheel with hub',xx,.231,zz,0,true);wheels.push(w);
@@ -283,7 +341,6 @@ function buildFactory(renderer){
   for(const zz of [-.41,.41]){box(g,.030,.115,.25,mats.black,.967,.56,zz,.038);box(g,.033,.035,.19,mats.light,.985,.584,zz,.011)}
   box(g,.036,.145,.33,mats.black,.979,.68,0,.045);box(g,.042,.045,.22,mats.blue,.998,.67,0,.013);
   cyl(g,.055,.055,.052,mats.red,.63,.92,-.43,[0,0,0],24);cyl(g,.076,.076,.02,mats.yellow,.63,.895,-.43,[0,0,0],24);
-  text(g,'LOGISTICS  /  AMR',.64,.085,0,.59,-.673,{fg:'#536874',rotate:[-Math.PI/2,0,Math.PI]});
   animations.push({type:'agv',node:g,wheels,device:d});return d
  }
  const agv1=agv(7,'AGV-01',-8.3,7.5,'running'),agv2=agv(8,'AGV-02',10.5,8,'idle');
@@ -296,7 +353,7 @@ function buildFactory(renderer){
  for(const zz of [-.53,.53])for(const xx of [-.28,.28])bolt(dock,xx,.12,zz,.031);
  tube(dock,[[.25,.19,-.39],[.47,.12,-.46],[.51,.062,-.65],[.35,.06,-.96],[-.1,.06,-1.08]],.026,mats.rubber);
  text(dock,'DC / 48V',.50,.084,-.266,.75,0,{fg:'#263e48',rotate:[Math.PI/2,0,Math.PI/2]});
- floorText('CHARGE',11.6,9.95,1.6,.26);
+ floorText('充电位',11.6,9.95,.9,.28,'#d8d4b0');
 
 
  // Under-belt extrusion channels, bearings, photoeyes, wiring trunks and adjustable braces.
@@ -318,7 +375,7 @@ function buildFactory(renderer){
  box(met,2.19,.22,.26,mats.panel,0,2.90,-.58,.04);box(met,1.94,.045,.032,mats.teal,0,2.925,-.43,.015);
  box(met,.28,.33,.32,mats.dark,.12,2.67,-.47,.04);cyl(met,.043,.043,.72,mats.steel,.12,2.22,-.40,[0,0,0],20);cyl(met,.017,.023,.16,mats.orange,.12,1.80,-.40,[0,0,0],16);
  let tray=moduleProduct(met);tray.position=[-.23,1.36,.18];tray.scale=[.86,.86,.86];screen(met,.52,.33,1.03,1.65,.72,'METROLOGY');
- text(met,'PRECISION LAB',1.01,.13,-.28,2.91,-.438,{fg:'#304b58'});
+ text(met,'检测台',.46,.13,-.28,2.91,-.438,{fg:'#304b58'});
  for(const zz of [-.57,.57])box(met,2.2,.055,.055,mats.dark,0,.37,zz,.012);
  // Routed overhead service tray: separate rails, ladder rungs and retained cable bundles.
  const service=group(root,'Overhead utility systems');
@@ -350,7 +407,7 @@ function buildFactory(renderer){
  }
  const fire=group(root,'Safety / fire point',-13.30,0,-6.5);
  box(fire,.16,1.48,.15,mats.dark,0,.76,0,.024);cyl(fire,.13,.13,.53,mats.orangeDark,0,.56,.17,[0,0,0],32);cyl(fire,.07,.13,.16,mats.red,0,.91,.17);box(fire,.25,.055,.11,mats.dark,.055,1.03,.17,.025);
- tube(fire,[[.06,1.0,.17],[.21,.91,.18],[.24,.58,.18],[.15,.36,.18]],.017,mats.black);text(fire,'FIRE',.40,.19,0,1.43,.12,{fg:'#f1dacf',bg:'#713b2b'});
+ tube(fire,[[.06,1.0,.17],[.21,.91,.18],[.24,.58,.18],[.15,.36,.18]],.017,mats.black);text(fire,'灭火器',.40,.15,0,1.43,.12,{fg:'#ffffff',bg:'#b8322a'});
  // Perforated service racks and tote storage; every shelf has four grounded legs.
  const rack=group(root,'Incoming material racks',-12.72,0,-1.92);
  for(const xx of [-.57,.57])for(const zz of [-.66,.66]){box(rack,.055,2.71,.055,mats.steel,xx,1.39,zz,.009);box(rack,.17,.07,.17,mats.dark,xx,.055,zz,.012)}
@@ -358,9 +415,45 @@ function buildFactory(renderer){
   box(rack,1.28,.075,1.48,mats.steel,0,yy,0,.02);
   for(const xx of [-.29,.29]){box(rack,.49,.47,1.14,mats.pallet,xx,yy+.28,0,.043);box(rack,.44,.025,1.07,mats.dark,xx,yy+.53,0,.012);box(rack,.25,.10,.028,mats.dark,xx,yy+.33,.588,.019)}
  }
- text(rack,'INBOUND',1.0,.18,0,2.60,.73,{fg:'#c8dad7'});
+ text(rack,'来料',.5,.18,0,2.60,.73,{fg:'#c8dad7'});
+ // Column feet: non-shrink grout under the base plate and yellow/black impact guards along traffic routes.
+ function columnGuard(p,x,z,w=.52,d=.52){for(let i=0;i<5;i++)box(p,w,.2,d,i%2?mats.black:mats.yellow,x,.1+i*.2,z,.01)}
+ for(const z of [-10.3,-4,3.9])box(root,.92,.035,.88,mats.concrete,-14.2,.0175,z,0);
+ for(const z of [-10.3,-5.0])box(root,.9,.035,.84,mats.concrete,14.3,.0175,z,0);
+ columnGuard(root,-14.2,3.9,.56,.58);columnGuard(root,14.3,-5.0,.52,.56);
+ // Equipment foundations: cast concrete pads with a painted edge, fixed by anchor bolts.
+ function foundation(x,z,w,d){box(root,w,.05,d,mats.concrete,x,.025,z,.01);for(const s of [-1,1]){box(root,w,.052,.05,mats.yellow,x,.026,z+s*(d/2-.025),0);box(root,.05,.052,d,mats.yellow,x+s*(w/2-.025),.026,z,0)}}
+ foundation(-3.6,-5.7,5.1,3.4);foundation(8.0,-5.45,4.6,3.2);foundation(-9.25,-4.9,2.9,2.5);
+ for(const x of [-5.2,4.0]){box(root,1.9,.045,1.85,mats.concrete,x,.0225,2.25,.01);for(const dx of [-.8,.8])for(const dz of [-.78,.78]){bolt(root,x+dx,.06,2.25+dz,.03);cyl(root,.012,.012,.07,mats.steel,x+dx,.08,2.25+dz,[0,0,0],6)}}
+ // Vertical ladder tray drops from the overhead run to the machine tops.
+ function trayRun(p,a,b,w=.32){
+  const axis=[0,1,2].find(i=>Math.abs(b[i]-a[i])>.01),len=Math.abs(b[axis]-a[axis]),mid=a.map((v,i)=>(v+b[i])/2),side=axis===1?0:axis===0?2:0;
+  for(const s of [-1,1]){const o=[...mid];o[side]+=s*w/2;const size=[.03,.03,.03];size[axis]=len;if(axis!==1)size[1]=.09;box(p,size[0],size[1],size[2],mats.steel,o[0],o[1],o[2],.004)}
+  for(let t=.15;t<len;t+=.3){const q=[...mid];q[axis]=Math.min(a[axis],b[axis])+t;const size=[.025,.02,.025];size[side]=w;box(p,size[0],size[1],size[2],mats.steel,q[0],q[1],q[2],0)}
+  const cable=[...mid];cable[side]+=.04;const cs=[.07,.05,.07];cs[axis]=len;if(axis===1)cs[side]=.16;else cs[1]=.05;box(p,cs[0],cs[1],cs[2],mats.rubber,cable[0],cable[1],cable[2],.02);
+ }
+ trayRun(service,[-3.6,5.38,-8.33],[-3.6,3.55,-8.33]);trayRun(service,[-3.6,3.52,-8.33],[-3.6,3.52,-6.95]);
+ trayRun(service,[8.0,5.38,-8.33],[8.0,3.45,-8.33]);trayRun(service,[8.0,3.42,-8.33],[8.0,3.42,-6.7]);
+ // Warning signs on the robot cell guards (GB 2894 style triangle with a text panel).
+ const signMats=new Map();
+ function sign(p,label,x,y,z,rotate){
+  let mat=signMats.get(label);if(!mat){const c=document.createElement('canvas');c.width=256;c.height=320;const ctx=c.getContext('2d');
+   ctx.fillStyle='#f4f2ea';ctx.fillRect(0,0,256,320);ctx.fillStyle='#e8b923';ctx.strokeStyle='#161616';ctx.lineWidth=14;ctx.lineJoin='round';
+   ctx.beginPath();ctx.moveTo(128,24);ctx.lineTo(230,200);ctx.lineTo(26,200);ctx.closePath();ctx.fill();ctx.stroke();
+   ctx.fillStyle='#161616';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='bold 104px Arial';ctx.fillText('!',128,136);
+   ctx.font='bold 38px "Microsoft YaHei", "PingFang SC", sans-serif';ctx.fillText(label,128,262,236);
+   mat=new Material('#ffffff',.7,0,.1);mat.texture=renderer.canvasTexture(c);signMats.set(label,mat)}
+  const n=mesh(p,G.plane(.34,.425),mat,[x,y,z],rotate);n.castShadow=false;return n;
+ }
+ sign(root,'当心机械伤人',-5.2,.95,3.76,[Math.PI/2,0,0]);sign(root,'当心机械伤人',4.0,.95,3.76,[Math.PI/2,0,0]);
+ sign(root,'当心机械伤人',-7.42,.95,2.8,[Math.PI/2,0,Math.PI/2]);
+ sign(root,'当心 AGV',-13.9,1.6,3.9,[Math.PI/2,0,-Math.PI/2]);
+ // Indoor fire hydrant cabinet on the west column line.
+ const hydrant=group(root,'Fire hydrant cabinet',-13.78,0,-4);
+ box(hydrant,.24,1.0,.72,mats.signRed,0,1.05,0,.012);box(hydrant,.012,.62,.5,mats.glassDark,.125,1.12,0,0);
+ text(hydrant,'消火栓',.36,.1,.127,1.44,0,{fg:'#ffffff',rotate:[Math.PI/2,0,-Math.PI/2]});
  // Selection positions and low-frequency contact shading follow the actual moving equipment.
- function cameraVisibility(eye){northShell.visible=eye[2]>-9.85;westShell.visible=eye[0]>-14.25}
+ function cameraVisibility(eye){northShell.visible=eye[2]>-9.85;westShell.visible=eye[0]>-14.25;hallBack.visible=eye[2]>-17.7;hallWest.visible=eye[0]>-29}
  function contacts(){return new Float32Array([
   -5.2,2.25,1.05,.95, 4,2.25,1.05,.95, -3.6,-5.7,2.5,1.55, 8,-5.45,2.2,1.55,
   agv1.node.position[0],agv1.node.position[2],1,.7, agv2.node.position[0],agv2.node.position[2],1,.7,
@@ -368,9 +461,8 @@ function buildFactory(renderer){
  ])}
  // Keep the two status halos independent of animation and exempt from shadow casting.
  function halo(mat){let n=group(root,'Device focus',0,0,0,0,true);for(let i=0;i<4;i++){let a=group(n,'corner',0,0,0,i*Math.PI/2);box(a,.55,.014,.035,mat,1.05,.055,1.05,.004).castShadow=false;box(a,.035,.014,.55,mat,1.05,.055,.79,.004).castShadow=false}n.visible=false;return n}
- const selectedHalo=halo(new Material('#70ddc3',.7,0,.5)),alarmHalo=halo(new Material('#ff8254',.4,0,1.4));
- const alertBeam=new Material('#ff6e34',.8,0,.65,.13);alertBeam.volume=true;let alertColumn=cyl(root,1.4,1.4,4.0,alertBeam,0,2.02,0,[0,0,0],56);alertColumn.dynamic=true;alertColumn.castShadow=false;alertColumn.reflect=false;alertColumn.visible=false;
- // Compile static geometry into per-material draw batches; robot joints stay articulated.
+ const selectedHalo=halo(new Material('#2f7a5c',.7,0,.35)),alarmHalo=halo(new Material('#ff8254',.4,0,1.4));
+  // Compile static geometry into per-material draw batches; robot joints stay articulated.
  optimize(root);root.update();
  const stateCache=new Map();
  function update(t,dt){
@@ -405,7 +497,7 @@ function buildFactory(renderer){
   }
  }
  function selection(d){selectedHalo.visible=!!d;if(d){selectedHalo.position=[d.focus[0],0,d.focus[2]];selectedHalo.scale=d.id===1?[2,1,1]:[1,1,1]}}
- function alarm(d,t){alarmHalo.visible=alertColumn.visible=!!d;if(d){alarmHalo.position=[d.focus[0],0,d.focus[2]];alarmHalo.scale=[1.2+Math.sin(t*3)*.07,1,1.2+Math.sin(t*3)*.07];alertColumn.position=[d.focus[0],2,d.focus[2]];alertBeam.alpha=.06+.04*(.5+.5*Math.sin(t*3))}}
+ function alarm(d,t){alarmHalo.visible=!!d;if(d){alarmHalo.position=[d.focus[0],0,d.focus[2]];alarmHalo.scale=[1.2+Math.sin(t*3)*.04,1,1.2+Math.sin(t*3)*.04]}}
  return {root,devices,update,selection,alarm,animations,mats,cameraVisibility,contacts};
 }
 window.buildFactory=buildFactory;

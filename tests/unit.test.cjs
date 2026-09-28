@@ -1,8 +1,8 @@
 'use strict';
 const {test}=require('node:test');const assert=require('node:assert/strict');const fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
-const {Telemetry}=require('../src/telemetry.js');
+const {Telemetry}=require('../js/telemetry.js');
 function fixture(){return Array.from({length:8},(_,i)=>({id:i+1,code:'D-'+(i+1),state:i===7?'idle':'running',online:true,temperature:40+i,power:2+i*.2,output:i===5?12480:200,cycle:2,history:[]}))}
-const ctx={window:{},console};vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../src/engine.js'),'utf8'),ctx);const {M,V,G,Node}=ctx.window.TwinGL;
+const ctx={window:{},console};vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../js/engine.js'),'utf8'),ctx);const {M,V,G,Node}=ctx.window.TwinGL;
 test('baseline: eight connected devices, seven running, one idle',()=>{let t=new Telemetry(fixture());assert.deepEqual([t.summary().online,t.summary().running,t.summary().idle],[8,7,1])});
 test('identical seeds produce repeatable telemetry',()=>{let a=new Telemetry(fixture(),7),b=new Telemetry(fixture(),7);for(let i=0;i<12;i++){a.step(1);b.step(1)}assert.deepEqual(a.snapshot(),b.snapshot())});
 test('unpaused telemetry updates temperature and integrates energy',()=>{let t=new Telemetry(fixture());let before=t.snapshot();t.step(1);assert.notEqual(t.devices[0].temperature,before.devices[0].temperature);assert.ok(t.energy>before.summary.energy)});
@@ -23,4 +23,4 @@ test('negative elapsed time cannot reverse simulation',()=>{let t=new Telemetry(
 test('matrix multiplication, translation and rotation are consistent',()=>{let m=M.mul(M.translation(1,2,3),M.ry(Math.PI/2)),p=M.point(m,[1,0,0]);assert.ok(Math.abs(p[0]-1)<1e-6);assert.ok(Math.abs(p[1]-2)<1e-6);assert.ok(Math.abs(p[2]-2)<1e-6)});
 test('beveled geometry has finite positions and unit normals',()=>{let g=G.box(2,3,1,.1);assert.equal(g.v.length,g.n.length);assert.equal(g.uv.length,g.v.length/3*2);assert.ok(g.v.every(Number.isFinite));for(let i=0;i<g.n.length;i+=3)assert.ok(Math.abs(Math.hypot(g.n[i],g.n[i+1],g.n[i+2])-1)<1e-6)});
 test('scene graph inherits device IDs and composes transforms',()=>{let a=new Node(),b=new Node();a.id=3;a.position=[4,0,0];b.position=[1,2,0];a.add(b);a.update();assert.equal(b.pickId,3);assert.equal(b.world[12],5);assert.equal(b.world[13],2)});
-test('offline build contains all runtime code and no external dependency tags',()=>{let html=fs.readFileSync(path.join(__dirname,'../factory-twin-offline.html'),'utf8');assert.ok(html.includes('class Renderer'));assert.ok(html.includes('function buildFactory'));assert.doesNotMatch(html,/<script[^>]*src=|<link[^>]*href="(?:https?:|src\/)/i)});
+test('index.html loads only local classic scripts and styles, so file:// works',()=>{let html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');const scripts=[...html.matchAll(/<script([^>]*)src="([^"]+)"/g)];assert.deepEqual(scripts.map(m=>m[2]),['js/engine.js','js/factory.js','js/telemetry.js','js/app.js']);for(const m of scripts){assert.match(m[1],/defer/);assert.doesNotMatch(m[1],/type="module"/);assert.ok(fs.existsSync(path.join(__dirname,'..',m[2])))}assert.doesNotMatch(html,/(?:src|href)="(?:https?:)?\/\//i);assert.ok(fs.existsSync(path.join(__dirname,'../css/app.css')))});
