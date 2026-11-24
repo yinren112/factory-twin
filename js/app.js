@@ -20,7 +20,7 @@ function init(){
   let selected=factory.devices.find(d=>d.id===3),labelsVisible=true,mode='home',night=false,nightMix=0;
   let frames=0,fpsT=performance.now(),fpsValue=0,raf=0,last=performance.now(),lastRender=0,lastStamp='';
   const pins=new Map(),rows=new Map();
-  function renderScene(){factory.cameraVisibility(camera.eye());renderer.contacts=factory.contacts();renderer.night=nightMix;renderer.render(factory.root,camera)}
+  function renderScene(){factory.cameraVisibility(camera.eye());renderer.contacts=factory.contacts();renderer.lamps=factory.lamps;renderer.night=nightMix;renderer.render(factory.root,camera)}
 
   for(const d of factory.devices){
    const pin=document.createElement('button');pin.type='button';pin.className='device-pin';pin.dataset.device=String(d.id);

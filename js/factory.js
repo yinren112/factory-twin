@@ -6,6 +6,9 @@ function buildFactory(renderer){
  const root=new Node('Smart Factory Twin');
  const mats={floor:new Material('#43555e',.42,.08),slab:new Material('#25343d',.5,.2),edge:new Material('#405562',.3,.65),dark:new Material('#19252c',.38,.45),black:new Material('#10191e',.63,.05),steel:new Material('#9aabb4',.29,.78),silver:new Material('#d3dfe1',.28,.65),panel:new Material('#d1d8d7',.38,.15),white:new Material('#edf0e7',.3,.1),wall:new Material('#2f424e',.64,.18),wallDark:new Material('#263940',.5,.3),orange:new Material('#e98435',.26,.12),orangeDark:new Material('#bd591f',.36,.12),yellow:new Material('#d1b674',.44,.08),teal:new Material('#4f8467',.55,.05),concrete:new Material('#9da39f',.92,.02),signRed:new Material('#b8322a',.45,.1),rubber:new Material('#142128',.82,.0),pallet:new Material('#647c84',.5,.45),green:new Material('#76f3ca',.2,.1,1.6),amber:new Material('#ffa561',.25,.1,1.8),red:new Material('#ff6a3d',.24,.15,2),light:new Material('#d7f2ed',.2,.1,2.2),blue:new Material('#60bbd2',.24,.35,1),glass:new Material('#80c4cc',.15,.20,0,.12),glassDark:new Material('#10272f',.12,.58),ink:new Material('#243238',.7),muted:new Material('#7e969d',.7)};
  mats.floor.floor=true;
+ // Surface finishes (engine.js): 1 painted metal, 2 brushed steel, 3 cast concrete, 4 rubber.
+ for(const k of ['orange','orangeDark','panel','white','yellow','teal','signRed','wall','wallDark','dark','edge','pallet'])mats[k].finish=1;
+ for(const k of ['steel','silver'])mats[k].finish=2;mats.concrete.finish=3;mats.slab.finish=3;mats.rubber.finish=4;mats.black.finish=4;
  let geoCache=new Map();const geo=(k,fn)=>{if(!geoCache.has(k))geoCache.set(k,fn());return geoCache.get(k)};
  const box=(p,w,h,d,mat,x=0,y=0,z=0,r=.025,rot=[0,0,0])=>(r=Math.min(r,.03),mesh(p,geo(`b${w},${h},${d},${r}`,()=>G.box(w,h,d,r)),mat,[x,y,z],rot));
  const cyl=(p,rt,rb,h,mat,x=0,y=0,z=0,rot=[0,0,0],segments=40)=>mesh(p,geo(`c${rt},${rb},${h},${segments}`,()=>G.cylinder(rt,rb,h,segments)),mat,[x,y,z],rot);
@@ -64,6 +67,16 @@ function buildFactory(renderer){
   for(let i=0;i<7;i++){let a=i/7*TAU;box(p,r*1.5,.025,.022,mats.dark,x,y,z+.03,.008,[0,0,a])}
   cyl(p,r*.25,r*.25,.035,mats.steel,x,y,z+.035,[Math.PI/2,0,0]);
  }
+ // AC servo motor: finned body, brake cap, rear encoder and an angled power connector.
+ // Grows from (x,y,z) along +axis ('y' or 'z'); the connector sits on the +side direction.
+ function servo(p,x,y,z,axis,len,r,side=[0,1,0]){
+  const rot=axis==='z'?[Math.PI/2,0,0]:[0,0,0],at=t=>axis==='z'?[x,y,z+t]:[x,y+t,z];
+  cyl(p,r*1.12,r*1.12,.035,mats.steel,...at(.018),rot,32);cyl(p,r,r,len,mats.dark,...at(len/2+.03),rot,32);
+  for(let i=0;i<5;i++)cyl(p,r*1.07,r*1.07,.012,mats.black,...at(.09+i*len*.13),rot,32);
+  cyl(p,r*.9,r*.96,.06,mats.steel,...at(len+.06),rot,32);cyl(p,r*.55,r*.55,.03,mats.black,...at(len+.1),rot,24);
+  const c=at(len*.72+.03).map((v,i)=>v+side[i]*(r+.035));box(p,.075,.075,.075,mats.black,...c,.012);
+  cyl(p,.024,.024,.06,mats.steel,...c.map((v,i)=>v+side[i]*.06),side[0]?[0,0,Math.PI/2]:side[2]?[Math.PI/2,0,0]:[0,0,0],12);
+ }
  const northShell=group(root,'North cutaway facade',0,0,0,0,true),westShell=group(root,'West cutaway facade',0,0,0,0,true);
 
  // Architectural shell: open roof and two cutaway facades preserve sight lines.
@@ -114,7 +127,10 @@ function buildFactory(renderer){
  const rackBlue=new Material('#2f6f9a',.5,.3);
  for(const x of [-24,24])for(const z of [-9,-2,5]){
   const storage=group(hall,'Material buffer rack',x,0,z);
-  for(const xx of [-1.8,1.8])for(const zz of [-1.1,1.1])box(storage,.095,3.65,.095,rackBlue,xx,1.825,zz,.01);
+  for(const xx of [-1.8,1.8])for(const zz of [-1.1,1.1]){box(storage,.095,3.65,.095,rackBlue,xx,1.825,zz,.01);box(storage,.2,.02,.2,mats.steel,xx,.01,zz,0);
+   for(let y=.3;y<3.5;y+=.1)box(storage,.024,.05,.004,mats.black,xx,y,zz+Math.sign(zz)*.049,0)}
+  // Upright frames: horizontal and diagonal lacing between front and back columns.
+  for(const xx of [-1.8,1.8])for(let i=0;i<6;i++){const y=.12+i*.55,s=i%2?1:-1;link(storage,[xx,y,s*1.05],[xx,y+.55,-s*1.05],.016,rackBlue);box(storage,.03,.03,2.1,rackBlue,xx,y,0,0)}
   for(const y of [.18,1.35,2.52]){
    box(storage,3.7,.13,2.32,mats.orange,0,y,0,.015);
    for(const xx of [-.95,.95]){
@@ -196,6 +212,8 @@ function buildFactory(renderer){
   const base=group(g,'J1 pedestal yaw',0,.85,0,0,true);
   casting(base,[[-.53,-.04],[.50,-.04],[.50,.35],[.32,.62],[-.30,.62],[-.55,.31]],.88,mats.orange,0,0,0,.07);
   box(base,.49,.31,.51,mats.orangeDark,-.19,.2,-.47,.10);vents(base,-.2,.20,-.74,.30,.20);
+  // J1 yaw motor stands at the back of the column; J2 drive sits low on the flank, axis parallel to the shoulder.
+  servo(base,-.66,.02,.2,'y',.30,.095,[-1,0,0]);servo(base,-.38,.18,.37,'z',.24,.092,[0,1,0]);
   cyl(base,.32,.32,1.08,mats.dark,0,.49,0,[Math.PI/2,0,0],48);
   for(const zz of [-.58,.58]){
    cyl(base,.34,.34,.085,mats.orange,0,.49,zz,[Math.PI/2,0,0],48);
@@ -211,6 +229,7 @@ function buildFactory(renderer){
    box(shoulder,.09,.94,.03,mats.orange,-.04,1.00,side*.345,.038);
    for(const yy of [.47,1.49])bolt(shoulder,-.07,yy,side*.356,.026,'z');
   }
+  servo(shoulder,.12,1.5,.33,'z',.20,.088,[1,0,0]);
     // Continuous anchored dress pack along the outer flank, clear of the casting.
   tube(shoulder,[[-.39,.07,-.30],[-.52,.32,-.35],[-.52,.62,-.40],[-.46,1.2,-.40],[-.41,1.62,-.36],[-.29,1.90,-.34]],.065,mats.rubber);
   for(let yy=.37;yy<1.62;yy+=.105){let xx=-.53+(yy-.37)*.10;torus(shoulder,.067,.010,mats.edge,xx,yy,-.40)}
@@ -276,6 +295,13 @@ function buildFactory(renderer){
  box(ng,4.36,.065,.055,mats.teal,0,3.29,1.43,.015);screen(ng,.48,.40,1.75,2.46,1.40,'CNC / 01');cyl(ng,.085,.085,.04,mats.red,1.94,1.92,1.5,[Math.PI/2,0,0]);vents(ng,1.74,1.24,1.42,.52,.5);
  text(ng,'CNC-01',.7,.16,-.72,3.22,1.423,{fg:'#273d45'});cnc.setLamps=statusTower(ng,1.79,3.40,-.9);
 
+ // CNC roof: oil-mist collector on a ducted stub, hatch seams, lifting eyes and a cable gland plate.
+ for(const xx of [-.75,.75])box(ng,.012,.006,2.6,mats.muted,xx,3.383,0,0);
+ for(const xx of [-1.95,1.95])for(const zz of [-1.15,1.15]){box(ng,.12,.03,.12,mats.steel,xx,3.395,zz,.008);torus(ng,.055,.013,mats.steel,xx,3.47,zz,[0,xx*zz>0?Math.PI/4:-Math.PI/4,Math.PI/2])}
+ cyl(ng,.30,.30,.05,mats.steel,.75,3.405,-.5,[0,0,0],40);cyl(ng,.27,.27,.50,mats.panel,.75,3.68,-.5,[0,0,0],40);
+ for(let i=0;i<6;i++)cyl(ng,.282,.282,.012,mats.dark,.75,3.5+i*.065,-.5,[0,0,0],40);
+ cyl(ng,.30,.30,.06,mats.dark,.75,3.95,-.5,[0,0,0],40);cyl(ng,.2,.24,.06,mats.steel,.75,4.01,-.5,[0,0,0],40);
+ tube(ng,[[.75,3.6,-.25],[.75,3.6,.1],[.6,3.52,.32],[.6,3.42,.36]],.07,mats.steel);cyl(ng,.11,.11,.03,mats.steel,.6,3.395,.36,[0,0,0],24);box(ng,.62,.04,.42,mats.dark,-1.2,3.40,-.95,.01);
  // CNC sheet-metal service seams, slide tracks, panel screws and cable gland block.
  for(const zz of [-1.09,.89])for(const xx of [-2.236,2.236])box(ng,.014,2.21,.024,mats.dark,xx,1.85,zz,.004);
  for(const yy of [.9,3.01])box(ng,3.34,.038,.10,mats.dark,-.21,yy,1.48,.01);
@@ -315,6 +341,10 @@ function buildFactory(renderer){
  for(const zz of [-.83,.83])box(pg,.08,1.63,.09,mats.dark,-2.22,1.72,zz,.016);
  box(pg,.50,.66,.16,mats.dark,2.05,1.48,.80,.04);for(const xx of [1.91,2.12]){cyl(pg,.06,.06,.30,mats.steel,xx,1.32,.91);cyl(pg,.08,.08,.11,mats.blue,xx,1.56,.91)}
  warning(pg,1.66,2.08,1.36);
+ // Roof fan-filter units, lifting eyes and seams on the packaging cell.
+ for(const xx of [-1.0,.15]){box(pg,.78,.08,.78,mats.dark,xx,3.31,.25,.02);for(let i=0;i<7;i++)box(pg,.66,.02,.022,mats.steel,xx,3.355,.25-.27+i*.09,0);cyl(pg,.06,.06,.03,mats.black,xx,3.36,.25,[0,0,0],16)}
+ for(const xx of [-.68,.68])box(pg,.012,.006,2.5,mats.muted,xx,3.273,0,0);
+ for(const xx of [-1.8,1.8])for(const zz of [-1.12,1.12]){box(pg,.12,.03,.12,mats.steel,xx,3.285,zz,.008);torus(pg,.055,.013,mats.steel,xx,3.36,zz,[0,xx*zz>0?Math.PI/4:-Math.PI/4,Math.PI/2])}
  // Service pallet with nested payloads.
  function palletStack(x,z){let g=group(root,'Pallet staging',x,0,z);for(let zz of [-.56,0,.56])box(g,1.6,.12,.20,mats.pallet,0,.18,zz,.01);for(let xx of [-.65,0,.65])box(g,.2,.14,1.35,mats.dark,xx,.11,0,.01);for(let x2 of [-.4,.4])for(let z2 of [-.35,.35]){box(g,.67,.52,.59,mats.panel,x2,.52,z2,.055);box(g,.69,.05,.6,mats.dark,x2,.81,z2,.008);box(g,.037,.58,.01,mats.teal,x2,.53,z2+.30,.002)}}
  palletStack(12.3,3.22);palletStack(-11.0,3.32);
@@ -366,6 +396,12 @@ function buildFactory(renderer){
   tube(cg,[[xx,1.24,-.84],[xx,.73,-.88],[xx+.25,.67,-.9],[xx+.65,.67,-.9]],.021,mats.black);
  }
  for(const x of [-11.6,11.6])for(const z of [-.81,.81]){cyl(cg,.12,.12,.085,mats.dark,x,1.13,z,[Math.PI/2,0,0],32);boltRing(cg,x,1.13,z+Math.sign(z)*.05,.08,6,'z',.018)}
+ // Adjustable product guides: round bars on standoff brackets with UHMW wear strips facing the pallets.
+ for(const zz of [-.63,.63]){const s=Math.sign(zz);
+  cyl(cg,.02,.02,22.7,mats.silver,0,1.50,zz,[0,0,Math.PI/2],16);box(cg,22.7,.05,.02,mats.black,0,1.47,zz-s*.03,.006);
+  for(let x=-11.1;x<=11.2;x+=1.35){box(cg,.035,.17,.035,mats.steel,x,1.39,s*.72,.008);box(cg,.035,.035,.12,mats.steel,x,1.47,s*.67,.008);box(cg,.05,.05,.03,mats.dark,x,1.50,zz+s*.035,.01)}
+ }
+ for(let x=-10.8;x<=11;x+=2.7)for(const zz of [-.72,.72]){cyl(cg,.025,.025,.09,mats.steel,x,.14,zz,[0,0,0],12);for(const dx of [-.13,.13])for(const dz of [-.14,.14])bolt(cg,x+dx,.108,zz+dz,.022)}
  box(cg,22.5,.12,.18,mats.dark,0,.70,-.95,.026);for(let xx=-10;xx<11;xx+=.8)box(cg,.33,.025,.016,mats.steel,xx,.73,-1.047,.006);
  // Free-standing metrology/service cell with a granite table, probes and work light.
  const met=group(root,'Metrology & process service',2.26,0,-6.23);
@@ -400,6 +436,14 @@ function buildFactory(renderer){
   box(root,.26,6.35,.09,mats.edge,14.3,3.21,z,.014);box(root,.72,.08,.66,mats.steel,14.3,.06,z,.015);
   for(const dx of [-.24,.24])for(const dz of [-.2,.2])bolt(root,14.3+dx,.13,z+dz,.05);
  }
+ // Warren roof trusses over both girders: top chord, end posts, alternating web diagonals, gusset plates and purlins.
+ for(const z of [-10.3,-5.0]){
+  box(root,28.9,.16,.22,mats.edge,0,7.27,z,.02);box(root,28.9,.035,.34,mats.dark,0,7.17,z,.008);
+  for(const x of [-14.35,14.35])box(root,.2,.84,.2,mats.edge,x,6.88,z,.015);
+  for(let i=0;i<24;i++){const x=-14.4+i*1.2,up=i%2===0;link(root,[x,up?6.5:7.2,z],[x+1.2,up?7.2:6.5,z],.034,mats.edge);
+   if(i%2===0)box(root,.24,.2,.03,mats.steel,x,6.58,z+.12,.006)}
+ }
+ for(let x=-13.2;x<=13.3;x+=2.4){box(root,.11,.18,5.7,mats.steel,x,7.44,-7.65,.012);for(const z of [-10.3,-5.0])box(root,.2,.03,.3,mats.dark,x,7.355,z,.006)}
  // Facade ventilation louvres and a labelled utility station, tucked into service aisle.
  for(const xx of [-12,-6,0,6,12]){
   box(northShell,1.22,.62,.09,mats.dark,xx,1.86,-10.44,.02);
@@ -498,7 +542,9 @@ function buildFactory(renderer){
  }
  function selection(d){selectedHalo.visible=!!d;if(d){selectedHalo.position=[d.focus[0],0,d.focus[2]];selectedHalo.scale=d.id===1?[2,1,1]:[1,1,1]}}
  function alarm(d,t){alarmHalo.visible=!!d;if(d){alarmHalo.position=[d.focus[0],0,d.focus[2]];alarmHalo.scale=[1.2+Math.sin(t*3)*.04,1,1.2+Math.sin(t*3)*.04]}}
- return {root,devices,update,selection,alarm,animations,mats,cameraVisibility,contacts};
+ // Night-shift light sources: the LED high-bays hung under the two roof girders.
+ const lamps=new Float32Array(56);{let i=0;for(const z of [-10.3,-5.0])for(let x=-12;x<=12;x+=4){lamps.set([x,5.95,z,8.5],i);i+=4}}
+ return {root,devices,update,selection,alarm,animations,mats,cameraVisibility,contacts,lamps};
 }
 window.buildFactory=buildFactory;
 })();
